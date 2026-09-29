@@ -1,0 +1,662 @@
+{
+  "Rice": {
+    "season": "Kharif (Monsoon)",
+    "duration": "120 - 150 Days",
+    "water": "High (1200 - 1500 mm)",
+    "icon": "fa-solid fa-wheat-awn",
+    "why_suitable": "Warm humid climate and heavy water availability provide optimal conditions for high-tillering paddy cultivars.",
+    "farming_tips": [
+      "Maintain 3-5 cm standing water layer during early tillering stage.",
+      "Apply balanced NPK along with basal dose of Zinc Sulfate (25 kg/ha).",
+      "Scout regularly for stem borer and leaf folder during vegetative stage."
+    ]
+  },
+  "Wheat": {
+    "season": "Rabi (Winter)",
+    "duration": "110 - 135 Days",
+    "water": "Medium (450 - 650 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Cool vegetative temperatures and well-aerated fertile soils favor robust tillering and dense grain filling.",
+    "farming_tips": [
+      "Ensure crown root initiation (CRI) irrigation within 21 days of sowing.",
+      "Split nitrogen application into two equal doses at 1st and 2nd irrigation.",
+      "Monitor for yellow rust symptoms in cool, humid morning weather."
+    ]
+  },
+  "Maize": {
+    "season": "Kharif / Spring",
+    "duration": "90 - 110 Days",
+    "water": "Medium (500 - 750 mm)",
+    "icon": "fa-solid fa-cubes-stacked",
+    "why_suitable": "Deep, well-drained loam and warm daytime temperatures promote rapid biomass development and high cob yield.",
+    "farming_tips": [
+      "Ensure proper field drainage furrows to prevent waterlogging.",
+      "Apply adequate potassium to reinforce stalk strength against lodging.",
+      "Scout early for Fall Armyworm in whorls during initial 30 days."
+    ]
+  },
+  "Sugarcane": {
+    "season": "Whole Year / Annual",
+    "duration": "300 - 365 Days",
+    "water": "High (1500 - 2200 mm)",
+    "icon": "fa-solid fa-tree",
+    "why_suitable": "Rich nutrient reserves, abundant sunlight, and sustained moisture enable exceptional cane tonnage and sugar recovery.",
+    "farming_tips": [
+      "Practice trash mulching between rows to conserve soil moisture.",
+      "Treat setts with fungicide before planting to prevent red rot.",
+      "Perform earthing-up in the 3rd to 4th month to prevent cane lodging."
+    ]
+  },
+  "Cotton(lint)": {
+    "season": "Kharif (Monsoon)",
+    "duration": "150 - 180 Days",
+    "water": "Medium (700 - 1100 mm)",
+    "icon": "fa-solid fa-cloud",
+    "why_suitable": "Deep fertile loam and warm growing season support steady boll formation and high lint quality.",
+    "farming_tips": [
+      "Install pheromone traps (5/acre) to monitor pink bollworm.",
+      "Spray 2% DAP foliar solution at peak flowering to reduce boll shedding.",
+      "Maintain clean weed-free conditions during the first 60 days."
+    ]
+  },
+  "Potato": {
+    "season": "Rabi (Winter)",
+    "duration": "80 - 105 Days",
+    "water": "Medium (400 - 550 mm)",
+    "icon": "fa-solid fa-circle",
+    "why_suitable": "Cool night temperatures and loose, potassium-rich soil allow rapid tuber bulking and smooth skin finish.",
+    "farming_tips": [
+      "Perform timely earthing up to prevent greening of developing tubers.",
+      "Maintain uniform light irrigations at 7 to 10 day intervals.",
+      "Apply preventive Mancozeb spray against early and late blight."
+    ]
+  },
+  "Groundnut": {
+    "season": "Kharif / Summer",
+    "duration": "105 - 125 Days",
+    "water": "Medium (500 - 650 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Light friable sandy loam with good drainage allows easy peg penetration and uniform pod development.",
+    "farming_tips": [
+      "Apply Gypsum @ 200 kg/acre at pegging stage to boost pod filling and oil content.",
+      "Inoculate seeds with Rhizobium culture prior to planting.",
+      "Avoid heavy water stagnation during flowering and pod development."
+    ]
+  },
+  "Moong(Green Gram)": {
+    "season": "Kharif / Summer",
+    "duration": "60 - 75 Days",
+    "water": "Low to Medium (350 - 450 mm)",
+    "icon": "fa-solid fa-leaf",
+    "why_suitable": "Short crop duration and natural nitrogen fixation make it an excellent choice for rotation and soil enrichment.",
+    "farming_tips": [
+      "Treat seeds with Rhizobium and Trichoderma before sowing.",
+      "Provide one irrigation at flowering and another at pod development.",
+      "Spray bio-pesticides early to manage whitefly and yellow mosaic virus."
+    ]
+  },
+  "Urad": {
+    "season": "Kharif / Summer",
+    "duration": "70 - 85 Days",
+    "water": "Low to Medium (400 - 500 mm)",
+    "icon": "fa-solid fa-leaf",
+    "why_suitable": "Thrives in warm conditions, replenishing soil nitrogen while delivering high protein grain yields.",
+    "farming_tips": [
+      "Ensure well-drained seedbed to protect against root rot during heavy rains.",
+      "Apply phosphorus as basal fertilizer to support strong nodulation.",
+      "Protect against pod borer attacks during early morning flowering."
+    ]
+  },
+  "Sesamum": {
+    "season": "Kharif / Summer",
+    "duration": "80 - 95 Days",
+    "water": "Low (300 - 400 mm)",
+    "icon": "fa-solid fa-spa",
+    "why_suitable": "Remarkable drought resilience and minimal nutrient demand make it highly remunerative in dry seasons.",
+    "farming_tips": [
+      "Maintain thin spacing (10-15 cm) to allow ample lateral branching.",
+      "Avoid excess water application to prevent phyllody and root rot.",
+      "Harvest when bottom capsules turn yellow to avoid pod shattering."
+    ]
+  },
+  "Rapeseed &Mustard": {
+    "season": "Rabi (Winter)",
+    "duration": "100 - 120 Days",
+    "water": "Low to Medium (300 - 450 mm)",
+    "icon": "fa-solid fa-spa",
+    "why_suitable": "Crisp winter weather and modest irrigation requirements yield high oil percentage and rich harvest.",
+    "farming_tips": [
+      "Apply Sulfur (20 kg/ha) at field preparation to increase seed oil content.",
+      "Ensure first irrigation at 30-35 days (rosette stage).",
+      "Keep ready aphid control measures during cloudy winter spells in January."
+    ]
+  },
+  "Bajra": {
+    "season": "Kharif (Monsoon)",
+    "duration": "75 - 90 Days",
+    "water": "Low (300 - 450 mm)",
+    "icon": "fa-solid fa-wheat-awn",
+    "why_suitable": "High heat and drought tolerance make pearl millet ideal for arid and semi-arid conditions.",
+    "farming_tips": [
+      "Sow after onset of first monsoon showers in well-drained soil.",
+      "Top-dress nitrogen 30 days after sowing following intercultivation.",
+      "Ensure bird scaring during grain dough and maturity stage."
+    ]
+  },
+  "Jowar": {
+    "season": "Kharif / Rabi",
+    "duration": "100 - 120 Days",
+    "water": "Low to Medium (400 - 600 mm)",
+    "icon": "fa-solid fa-wheat-awn",
+    "why_suitable": "Exceptional drought recovery and sturdy root system ensure steady fodder and grain production.",
+    "farming_tips": [
+      "Maintain plant spacing of 45 cm between rows for optimal sunlight interception.",
+      "Monitor for shoot fly attack during the initial 4-week window.",
+      "Apply balanced fertilization to enhance dual-purpose grain and stover yield."
+    ]
+  },
+  "Gram": {
+    "season": "Rabi (Winter)",
+    "duration": "95 - 115 Days",
+    "water": "Low (250 - 350 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Nitrogen-fixing chickpea thrives in residual moisture, requiring minimal irrigation while enriching soil.",
+    "farming_tips": [
+      "Perform seed treatment with Carbendazim + Rhizobium culture.",
+      "Nip terminal shoots at 30-40 days to promote profuse branching.",
+      "Install T-shaped bird perches across field for natural pod borer control."
+    ]
+  },
+  "Arhar/Tur": {
+    "season": "Kharif (Monsoon)",
+    "duration": "150 - 180 Days",
+    "water": "Medium (600 - 800 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Deep taproot system tolerates prolonged dry spells while adding massive organic nitrogen to soil.",
+    "farming_tips": [
+      "Adopt ridge and furrow planting method to prevent wilt from waterlogging.",
+      "Spray Neem oil or Emamectin Benzoate at 50% flowering to deter pod borers.",
+      "Intercrop with short-duration soybean or green gram for higher return."
+    ]
+  },
+  "Onion": {
+    "season": "Rabi / Kharif",
+    "duration": "110 - 130 Days",
+    "water": "Medium (500 - 700 mm)",
+    "icon": "fa-solid fa-circle-dot",
+    "why_suitable": "Friable soil and cool vegetative climate ensure tight bulb formation and extended storage life.",
+    "farming_tips": [
+      "Transplant 6-7 week old sturdy seedlings into raised beds.",
+      "Provide regular light irrigations and stop watering 10 days before harvest.",
+      "Cure harvested bulbs in shade for 7-10 days before storage."
+    ]
+  },
+  "Sunflower": {
+    "season": "Kharif / Rabi / Zaid",
+    "duration": "85 - 100 Days",
+    "water": "Medium (450 - 600 mm)",
+    "icon": "fa-solid fa-sun",
+    "why_suitable": "Photo-insensitive crop adaptable across seasons with deep root moisture extraction capacity.",
+    "farming_tips": [
+      "Hand pollination or placing bee hives improves seed setting significantly.",
+      "Apply Boron foliar spray (0.2%) at ray floret opening stage.",
+      "Protect heads from parrot and bird damage during seed ripening."
+    ]
+  },
+  "Soyabean": {
+    "season": "Kharif (Monsoon)",
+    "duration": "90 - 105 Days",
+    "water": "Medium (600 - 800 mm)",
+    "icon": "fa-solid fa-cubes",
+    "why_suitable": "High oil and protein content crop thriving in well-drained loam during warm monsoonal conditions.",
+    "farming_tips": [
+      "Inoculate seed with Bradyrhizobium japonicum before sowing.",
+      "Maintain adequate drainage to prevent collar rot in heavy rain.",
+      "Apply pre-emergence herbicide within 48 hours of sowing for weed control."
+    ]
+  },
+  "Ragi": {
+    "season": "Kharif (Monsoon)",
+    "duration": "100 - 120 Days",
+    "water": "Low to Medium (400 - 550 mm)",
+    "icon": "fa-solid fa-wheat-awn",
+    "why_suitable": "Nutrient-dense finger millet with superior climate resilience and adaptability to varied soil profiles.",
+    "farming_tips": [
+      "Transplant 21-day seedlings in rows for higher tillering.",
+      "Incorporate farmyard manure to enhance water retention in lighter soils.",
+      "Harvest when earheads turn distinct brown."
+    ]
+  },
+  "Banana": {
+    "season": "Whole Year",
+    "duration": "300 - 365 Days",
+    "water": "High (1500 - 2000 mm)",
+    "icon": "fa-solid fa-lemon",
+    "why_suitable": "High organic carbon and warm humid conditions yield heavy bunches with superior fruit sweetness.",
+    "farming_tips": [
+      "Use virus-free tissue culture plantlets for uniform maturity.",
+      "Provide drip fertigation with high potassium during fruit development.",
+      "Prop plants with bamboo poles to support heavy bunches against strong winds."
+    ]
+  },
+  "Coconut": {
+    "season": "Whole Year",
+    "duration": "Perennial",
+    "water": "High (1300 - 2000 mm)",
+    "icon": "fa-solid fa-tree",
+    "why_suitable": "Coastal and humid tropical agro-climates deliver maximum nut yield and copra content.",
+    "farming_tips": [
+      "Apply organic mulch and coir pith in the basin around palm trunks.",
+      "Supply balanced NPK and Magnesium Sulfate twice annually.",
+      "Install pheromone traps for rhinoceros beetle management."
+    ]
+  },
+  "Arecanut": {
+    "season": "Whole Year",
+    "duration": "Perennial",
+    "water": "High (1500 - 2500 mm)",
+    "icon": "fa-solid fa-tree",
+    "why_suitable": "High rainfall tropical valleys with deep well-drained soil produce premier grade arecanut harvest.",
+    "farming_tips": [
+      "Provide proper shade for young seedlings during first 3 years.",
+      "Spray Bordeaux mixture 1% before monsoon to prevent fruit rot (Koleroga).",
+      "Adopt intercropping with black pepper or cocoa for diversified income."
+    ]
+  },
+  "Castor seed": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Castor seed cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Castor seed suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Dry chillies": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Dry chillies cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Dry chillies suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Jute": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Jute cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Jute suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Linseed": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Linseed cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Linseed suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Mesta": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Mesta cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Mesta suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Niger seed": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Niger seed cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Niger seed suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Other  Rabi pulses": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Other  Rabi pulses cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Other  Rabi pulses suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Small millets": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Small millets cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Small millets suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Sweet potato": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Sweet potato cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Sweet potato suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Tapioca": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Tapioca cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Tapioca suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Tobacco": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Tobacco cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Tobacco suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Turmeric": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Turmeric cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Turmeric suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Black pepper": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Black pepper cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Black pepper suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Cardamom": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Cardamom cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Cardamom suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Coriander": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Coriander cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Coriander suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Garlic": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Garlic cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Garlic suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Ginger": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Ginger cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Ginger suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Horse-gram": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Horse-gram cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Horse-gram suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Cashewnut": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Cashewnut cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Cashewnut suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Barley": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Barley cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Barley suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Khesari": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Khesari cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Khesari suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Masoor": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Masoor cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Masoor suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Other Kharif pulses": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Other Kharif pulses cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Other Kharif pulses suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Safflower": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Safflower cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Safflower suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Sannhamp": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Sannhamp cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Sannhamp suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Peas & beans (Pulses)": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Peas & beans (Pulses) cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Peas & beans (Pulses) suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "other oilseeds": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support other oilseeds cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of other oilseeds suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Other Cereals": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Other Cereals cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Other Cereals suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Cowpea(Lobia)": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Cowpea(Lobia) cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Cowpea(Lobia) suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Oilseeds total": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Oilseeds total cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Oilseeds total suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Guar seed": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Guar seed cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Guar seed suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Other Summer Pulses": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Other Summer Pulses cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Other Summer Pulses suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  },
+  "Moth": {
+    "season": "Whole Year / Seasonal",
+    "duration": "90 - 130 Days",
+    "water": "Moderate (450 - 750 mm)",
+    "icon": "fa-solid fa-seedling",
+    "why_suitable": "Regional climatic factors, rainfall, and input usage strongly support Moth cultivation.",
+    "farming_tips": [
+      "Use certified high-yielding seeds of Moth suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ]
+  }
+}

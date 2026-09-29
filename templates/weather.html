@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+
+{% block title %}Weather Advisory{% endblock %}
+{% block page_title %}Weather Advisory{% endblock %}
+{% block breadcrumb_item %}Weather Advisory{% endblock %}
+
+{% block content %}
+<!-- Error Notification if Weather API is Unavailable with Retry Button -->
+<div class="alert alert-warning" id="weatherErrorMessage"
+  style="{% if not weather_error %}display: none;{% endif %} margin-bottom: 20px; justify-content: space-between; align-items: center;">
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <span>{{ weather_error or 'Weather forecast temporarily unavailable.' }}</span>
+  </div>
+  <button class="btn btn-secondary btn-sm refresh-weather-btn" data-location="{{ selected_location }}"
+    style="padding: 5px 12px; font-size: 0.8rem;">
+    <i class="fa-solid fa-rotate-right"></i> Retry
+  </button>
+</div>
+
+<!-- Weather Loading State Banner -->
+<div id="weatherLoadingState"
+  style="display: none; align-items: center; justify-content: center; gap: 10px; background: #edf9ee; border: 1px dashed var(--accent); padding: 12px; border-radius: var(--radius-md); margin-bottom: 20px; color: var(--primary-dark); font-weight: 600; font-size: 0.9rem;">
+  <i class="fa-solid fa-spinner fa-spin" style="color: var(--secondary); font-size: 1.2rem;"></i>
+  <span>Loading 7-day forecast...</span>
+</div>
+
+<!-- CURRENT WEATHER HERO CARD -->
+<section class="weather-hero-card">
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <div
+        style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.18); padding: 4px 14px; border-radius: var(--radius-full); font-size: 0.85rem;">
+        <i class="fa-solid fa-location-dot"></i>
+        <span class="live-weather-location">{{ weather['location'] }}</span>
+      </div>
+      <div
+        style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.18); padding: 4px 14px; border-radius: var(--radius-full); font-size: 0.85rem;">
+        <i class="fa-regular fa-calendar"></i>
+        <span class="live-weather-date">{{ weather['local_date_display'] or '' }}</span>
+      </div>
+      <div class="live-weather-updated" style="font-size: 0.8rem; color: #b7e4c7;">
+        <i class="fa-regular fa-clock" style="margin-right: 4px;"></i> Last updated: {{ last_updated or 'Just now' }}
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 20px; margin-top: 6px;">
+      <div class="weather-current-temp live-weather-temp">
+        <span>{{ weather['temp'] }}</span>
+        <span style="font-size: 1.8rem; margin-top: 4px;">°C</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        {% if weather['icon_url'] and is_live %}
+        <img src="{{ weather['icon_url'] }}" alt="{{ weather['condition'] }}" class="live-weather-icon-img"
+          style="width: 56px; height: 56px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+        {% else %}
+        <div style="font-size: 2.2rem; color: #74c69d;" class="live-weather-icon-fa">
+          <i class="{{ weather['fa_icon'] or 'fa-solid fa-cloud-sun' }}"></i>
+        </div>
+        {% endif %}
+        <div>
+          <div style="font-size: 1.35rem; font-weight: 700; color: #ffffff;" class="live-weather-cond">
+            {{ weather['description'] or weather['condition'] }}
+          </div>
+          <div style="color: #d8f3dc; font-size: 0.88rem; margin-top: 2px;" class="live-weather-feels">
+            Feels like {{ weather['feels_like'] }}°C • Min: {{ weather['temp_min'] }}°C / Max: {{ weather['temp_max']
+            }}°C
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="weather-metric-grid">
+    <div class="weather-metric-item">
+      <span><i class="fa-solid fa-droplet"></i> Humidity</span>
+      <span class="live-weather-humidity">{{ weather['humidity'] }}%</span>
+    </div>
+    <div class="weather-metric-item">
+      <span><i class="fa-solid fa-gauge"></i> Pressure</span>
+      <span class="live-weather-pressure">{{ weather['pressure'] }} hPa</span>
+    </div>
+    <div class="weather-metric-item">
+      <span><i class="fa-solid fa-wind"></i> Wind Speed</span>
+      <span class="live-weather-wind">{{ weather['wind_speed'] }} m/s</span>
+    </div>
+    <div class="weather-metric-item">
+      <span><i class="fa-solid fa-cloud-rain"></i> Rain Prob</span>
+      <span class="live-weather-rain">{{ weather['rain_probability'] }}%</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-body {
+    padding-top: 15px !important;
+  }
+
+  .weather-analytics-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 992px) {
+    .weather-analytics-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .weather-panel-card {
+    background: #ffffff;
+    border: 1px solid #d1fae5;
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    box-shadow: 0 2px 8px rgba(22, 101, 52, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .weather-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .weather-panel-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #dcfce7;
+    color: #15803d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+
+  .weather-panel-title {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #166534;
+    line-height: 1.2;
+  }
+
+  .weather-panel-subtitle {
+    font-size: 0.76rem;
+    color: #15803d;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .progress-day-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 9px;
+  }
+
+  .progress-day-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .progress-date-lbl {
+    width: 52px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #166534;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 8px;
+    background: #eef6f0;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 0 10px;
+    position: relative;
+  }
+
+  .progress-fill-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #86efac, #22c55e, #15803d);
+    transition: width 0.4s ease;
+  }
+
+  .progress-pct-val {
+    width: 36px;
+    text-align: right;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #166534;
+    flex-shrink: 0;
+  }
+</style>
+
+<!-- 🌿 THREE COMPACT VISUAL ANALYTICS PANELS -->
+<div class="weather-analytics-grid">
+
+  <!-- PANEL A: Temperature Trend -->
+  <div class="weather-panel-card">
+    <div class="weather-panel-header">
+      <div class="weather-panel-icon">
+        <i class="fa-solid fa-temperature-half"></i>
+      </div>
+      <div>
+        <div class="weather-panel-title">Temperature Trend</div>
+        <div class="weather-panel-subtitle">Daily maximum and minimum temperature (°C)</div>
+      </div>
+    </div>
+    <div style="flex: 1; min-height: 185px; position: relative;">
+      <canvas id="temperatureTrendCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- PANEL B: Rain Probability -->
+  <div class="weather-panel-card">
+    <div class="weather-panel-header">
+      <div class="weather-panel-icon">
+        <i class="fa-solid fa-cloud-showers-heavy"></i>
+      </div>
+      <div>
+        <div class="weather-panel-title">Rain Probability</div>
+        <div class="weather-panel-subtitle">Chance of rainfall (%)</div>
+      </div>
+    </div>
+    <div class="rain-progress-list" id="rainProgressList"
+      style="display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding: 2px 0;">
+      {% for f in forecast %}
+      <div class="progress-day-row">
+        <span class="progress-date-lbl">{{ f['display_date'] }}</span>
+        <div class="progress-track">
+          <div class="progress-fill-bar" style="width: {{ f['rain_probability'] }}%;"></div>
+        </div>
+        <span class="progress-pct-val">{{ f['rain_probability'] }}%</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- PANEL C: Humidity Trend -->
+  <div class="weather-panel-card">
+    <div class="weather-panel-header">
+      <div class="weather-panel-icon">
+        <i class="fa-solid fa-droplet"></i>
+      </div>
+      <div>
+        <div class="weather-panel-title">Humidity Trend</div>
+        <div class="weather-panel-subtitle">Daily average humidity (%)</div>
+      </div>
+    </div>
+    <div class="humidity-progress-list" id="humidityProgressList"
+      style="display: flex; flex-direction: column; justify-content: space-around; flex: 1; padding: 2px 0;">
+      {% for f in forecast %}
+      <div class="progress-day-row">
+        <span class="progress-date-lbl">{{ f['display_date'] }}</span>
+        <div class="progress-track">
+          <div class="progress-fill-bar" style="width: {{ f['humidity'] }}%;"></div>
+        </div>
+        <span class="progress-pct-val">{{ f['humidity'] }}%</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+<!-- 7-DAY FORECAST CARDS (Dynamic Calendar Dates) -->
+{% if forecast %}
+<section style="margin-bottom: 32px;" id="sevenDayForecastSection">
+  <div class="card-header" style="border: none; padding-bottom: 0; margin-bottom: 16px;">
+    <div class="card-title-box">
+      <i class="fa-regular fa-calendar-days" style="color: var(--primary);"></i>
+      <div>
+        <h3 class="card-title">7-Day Agro-Meteorological Daily Forecast</h3>
+        <p class="card-subtitle">Calibrated agro-meteorological 7-day field forecasts for crop planning</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="forecast-cards-row" style="grid-template-columns: repeat({{ forecast|length }}, 1fr);">
+    {% for f in forecast %}
+    <div class="forecast-card">
+      <div class="forecast-day">{{ f['day'] }}</div>
+      <div style="font-size: 0.76rem; color: var(--primary); font-weight: 700;">{{ f['display_date'] }}</div>
+      <div class="forecast-icon" style="margin: 2px 0;">
+        {% if f['icon_url'] %}
+        <img src="{{ f['icon_url'] }}" alt="{{ f['condition'] }}" style="width: 44px; height: 44px; margin: 0 auto;">
+        {% else %}
+        <i class="{{ f['fa_icon'] }}"></i>
+        {% endif %}
+      </div>
+      <div class="forecast-temp">
+        <span>{{ f['temp_max'] }}°</span>
+        <span style="color: var(--text-light); font-size: 0.85rem; font-weight: normal;">/ {{ f['temp_min'] }}°</span>
+      </div>
+      <div class="forecast-rain">
+        <i class="fa-solid fa-droplet" style="font-size: 0.7rem;"></i> {{ f['rain_probability'] }}% Rain
+      </div>
+      <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+        Hum: {{ f['humidity'] }}%
+      </div>
+      <div
+        style="font-size: 0.7rem; color: var(--primary); font-weight: 600; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+        {{ f['condition'] }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- 4 DETAILED RULE-BASED AGRICULTURE ADVISORIES -->
+<section style="margin-bottom: 32px;">
+  <div class="card-header" style="border: none; padding-bottom: 0; margin-bottom: 16px;">
+    <div class="card-title-box">
+      <i class="fa-solid fa-list-check" style="color: var(--secondary);"></i>
+      <div>
+        <h3 class="card-title">Rule-Based Agriculture Field Advisories</h3>
+        <p class="card-subtitle">Actionable agronomic guidance calculated in Python from 7-day forecast data</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="gap: 20px;">
+    <!-- 🌧️ Rain Advisory -->
+    <div class="card" style="border-left: 4px solid #0284c7;" id="advisoryCardRain">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div
+            style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="{{ advisories['rain']['icon'] }}" id="advisoryRainIcon"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; color: var(--text-heading);" id="advisoryRainTitle">{{
+            advisories['rain']['title'] }}</h3>
+        </div>
+        <span class="badge {{ advisories['rain']['badge_class'] }}" id="advisoryRainBadge">{{
+          advisories['rain']['level'] }}</span>
+      </div>
+      <p style="font-weight: 700; color: #0369a1; font-size: 0.92rem; margin-bottom: 10px;" id="advisoryRainHeadline">
+        {{ advisories['rain']['headline'] }}
+      </p>
+      <ul
+        style="padding-left: 18px; font-size: 0.88rem; color: var(--text-main); display: flex; flex-direction: column; gap: 6px;"
+        id="advisoryRainPoints">
+        {% for pt in advisories['rain']['points'] %}
+        <li>{{ pt }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- 💧 Irrigation Advisory -->
+    <div class="card" style="border-left: 4px solid #16a34a;" id="advisoryCardIrrigation">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div
+            style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: #dcfce7; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="{{ advisories['irrigation']['icon'] }}" id="advisoryIrrigationIcon"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; color: var(--text-heading);" id="advisoryIrrigationTitle">{{
+            advisories['irrigation']['title'] }}</h3>
+        </div>
+        <span class="badge {{ advisories['irrigation']['badge_class'] }}" id="advisoryIrrigationBadge">{{
+          advisories['irrigation']['level'] }}</span>
+      </div>
+      <p style="font-weight: 700; color: #15803d; font-size: 0.92rem; margin-bottom: 10px;"
+        id="advisoryIrrigationHeadline">
+        {{ advisories['irrigation']['headline'] }}
+      </p>
+      <ul
+        style="padding-left: 18px; font-size: 0.88rem; color: var(--text-main); display: flex; flex-direction: column; gap: 6px;"
+        id="advisoryIrrigationPoints">
+        {% for pt in advisories['irrigation']['points'] %}
+        <li>{{ pt }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- 🌡️ Temperature Advisory -->
+    <div class="card" style="border-left: 4px solid #ea580c;" id="advisoryCardTemperature">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div
+            style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: #ffedd5; color: #ea580c; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="{{ advisories['temperature']['icon'] }}" id="advisoryTempIcon"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; color: var(--text-heading);" id="advisoryTempTitle">{{
+            advisories['temperature']['title'] }}</h3>
+        </div>
+        <span class="badge {{ advisories['temperature']['badge_class'] }}" id="advisoryTempBadge">{{
+          advisories['temperature']['level'] }}</span>
+      </div>
+      <p style="font-weight: 700; color: #c2410c; font-size: 0.92rem; margin-bottom: 10px;" id="advisoryTempHeadline">
+        {{ advisories['temperature']['headline'] }}
+      </p>
+      <ul
+        style="padding-left: 18px; font-size: 0.88rem; color: var(--text-main); display: flex; flex-direction: column; gap: 6px;"
+        id="advisoryTempPoints">
+        {% for pt in advisories['temperature']['points'] %}
+        <li>{{ pt }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- 🌬️ Wind Advisory -->
+    <div class="card" style="border-left: 4px solid #eab308;" id="advisoryCardWind">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div
+            style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: #fef9c3; color: #ca8a04; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="{{ advisories['wind']['icon'] }}" id="advisoryWindIcon"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; color: var(--text-heading);" id="advisoryWindTitle">{{
+            advisories['wind']['title'] }}</h3>
+        </div>
+        <span class="badge {{ advisories['wind']['badge_class'] }}" id="advisoryWindBadge">{{
+          advisories['wind']['level'] }}</span>
+      </div>
+      <p style="font-weight: 700; color: #a16207; font-size: 0.92rem; margin-bottom: 10px;" id="advisoryWindHeadline">
+        {{ advisories['wind']['headline'] }}
+      </p>
+      <ul
+        style="padding-left: 18px; font-size: 0.88rem; color: var(--text-main); display: flex; flex-direction: column; gap: 6px;"
+        id="advisoryWindPoints">
+        {% for pt in advisories['wind']['points'] %}
+        <li>{{ pt }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const chartsData = {{ seven_day_charts | tojson
+  }};
+  if (chartsData && chartsData.labels && chartsData.labels.length > 0) {
+    if (window.renderTemperatureTrendChart) {
+      window.renderTemperatureTrendChart('temperatureTrendCanvas', chartsData);
+    }
+  }
+  });
+</script>
+{% endblock %}

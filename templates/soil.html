@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}Soil Analysis{% endblock %}
+{% block page_title %}Soil Analysis & Nutrition{% endblock %}
+{% block breadcrumb_item %}Soil Analysis{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+  <h2 style="font-size: 1.45rem; font-weight: 800; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+    <i class="fa-solid fa-vial-circle-check" style="color: var(--secondary);"></i>
+    <span>Soil Health & Fertility Diagnostics</span>
+  </h2>
+  <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 2px;">
+    Analyze soil chemistry, nutrient deficiencies, and receive balanced fertilizer application schedules and irrigation plans.
+  </p>
+</div>
+
+<div class="grid-2" style="align-items: start;">
+  <!-- LEFT: Soil Testing Input Form -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-box">
+        <i class="fa-solid fa-flask" style="color: var(--primary);"></i>
+        <div>
+          <h3 class="card-title">Soil Test Values</h3>
+          <p class="card-subtitle">Enter parameters from your Soil Health Card (SHC) or sensors</p>
+        </div>
+      </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('soil.index') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="ph">Soil pH Level (0-14)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-gauge"></i>
+            <input type="number" step="0.1" min="3.0" max="11.0" id="ph" name="ph" class="form-control" value="{{ form_data['ph'] }}" required>
+          </div>
+          <div class="form-hint">Ideal neutral range is 6.2 – 7.5</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="soil_type">Soil Type Classification</label>
+          <select id="soil_type" name="soil_type" class="form-control">
+            {% for st in soil_types %}
+              <option value="{{ st }}" {% if form_data['soil_type'] == st %}selected{% endif %}>{{ st }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="nitrogen">Available Nitrogen (N) (kg/ha)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-flask-vial"></i>
+            <input type="number" step="0.5" id="nitrogen" name="nitrogen" class="form-control" value="{{ form_data['nitrogen'] }}" required>
+          </div>
+          <div class="form-hint">Normal: 50 – 100 kg/ha</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="phosphorus">Available Phosphorus (P) (kg/ha)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-cubes"></i>
+            <input type="number" step="0.5" id="phosphorus" name="phosphorus" class="form-control" value="{{ form_data['phosphorus'] }}" required>
+          </div>
+          <div class="form-hint">Normal: 25 – 60 kg/ha</div>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="potassium">Available Potassium (K) (kg/ha)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-gem"></i>
+            <input type="number" step="1" id="potassium" name="potassium" class="form-control" value="{{ form_data['potassium'] }}" required>
+          </div>
+          <div class="form-hint">Normal: 120 – 280 kg/ha</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="organic_carbon">Organic Carbon (%)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-leaf"></i>
+            <input type="number" step="0.01" id="organic_carbon" name="organic_carbon" class="form-control" value="{{ form_data['organic_carbon'] }}" required>
+          </div>
+          <div class="form-hint">Normal: 0.50% – 0.80%</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between;">
+          <label class="form-label" for="moisture">Volumetric Soil Moisture (%)</label>
+          <span class="badge badge-info" id="moistureDisplay">{{ form_data['moisture'] }}%</span>
+        </div>
+        <input type="range" min="10" max="95" step="1" id="moisture" name="moisture" value="{{ form_data['moisture'] }}" class="slider-input" data-target="moistureDisplay" style="width: 100%; accent-color: var(--secondary);">
+        <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">
+          <span>10% (Dry / Wilting)</span>
+          <span>55% (Field Capacity)</span>
+          <span>95% (Saturated)</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 10px;">
+        <i class="fa-solid fa-vial-circle-check"></i>
+        <span>🧪 Analyze Soil & Calculate Nutrition</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- RIGHT: Soil Diagnosis & Nutrient Cards -->
+  <div>
+    {% if result %}
+      <!-- Overall Health Card -->
+      <div class="card" style="border: 2px solid var(--secondary); background: linear-gradient(180deg, #ffffff 0%, #f7fbf8 100%); margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div>
+            <span class="badge badge-success" style="font-size: 0.75rem; margin-bottom: 6px;">
+              <i class="fa-solid fa-shield-halved"></i> Soil Health Status
+            </span>
+            <div style="font-size: 1.55rem; font-weight: 800; color: {{ result['health_color'] }};">
+              {{ result['health_category'] }}
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+              Soil Type: <strong>{{ result['soil_type'] }}</strong>
+            </div>
+          </div>
+
+          <div style="text-align: right;">
+            <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary);">
+              {{ result['health_score'] }}<span style="font-size: 1.1rem; color: var(--text-muted);">/100</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Score Bar -->
+        <div class="progress-bar-container" style="height: 12px; margin-bottom: 20px;">
+          <div class="progress-bar-fill" style="width: {{ result['health_score'] }}%; background: linear-gradient(90deg, #52b788, #2d6a4f);"></div>
+        </div>
+
+        <!-- 5 Key Nutrient Status Badges Grid -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
+          <!-- N -->
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-md); text-align: center;">
+            <div style="font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Nitrogen (N)</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading); margin: 2px 0;">{{ result['nitrogen']['value'] }}</div>
+            <span class="badge {{ result['nitrogen']['badge'] }}">{{ result['nitrogen']['status'] }}</span>
+          </div>
+
+          <!-- P -->
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-md); text-align: center;">
+            <div style="font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Phosphorus (P)</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading); margin: 2px 0;">{{ result['phosphorus']['value'] }}</div>
+            <span class="badge {{ result['phosphorus']['badge'] }}">{{ result['phosphorus']['status'] }}</span>
+          </div>
+
+          <!-- K -->
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-md); text-align: center;">
+            <div style="font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Potassium (K)</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading); margin: 2px 0;">{{ result['potassium']['value'] }}</div>
+            <span class="badge {{ result['potassium']['badge'] }}">{{ result['potassium']['status'] }}</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+          <!-- pH -->
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div style="font-size: 0.74rem; color: var(--text-muted); font-weight: 600;">Reaction (pH)</div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading);">{{ result['ph']['value'] }}</div>
+            </div>
+            <span class="badge {{ result['ph']['badge'] }}">{{ result['ph']['status'] }}</span>
+          </div>
+
+          <!-- Moisture -->
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div style="font-size: 0.74rem; color: var(--text-muted); font-weight: 600;">Moisture</div>
+              <div style="font-size: 1.15rem; font-weight: 800; color: #0284c7;">{{ result['moisture']['value'] }}%</div>
+            </div>
+            <span class="badge {{ result['moisture']['badge'] }}" style="font-size: 0.68rem;">{{ result['moisture']['status'].split('—')[0] }}</span>
+          </div>
+        </div>
+
+        <!-- pH Advice -->
+        <div style="background: #edf8f1; padding: 12px 16px; border-radius: var(--radius-md); margin-top: 14px; font-size: 0.85rem; color: var(--primary-dark); border-left: 3px solid var(--secondary);">
+          <strong>pH Assessment:</strong> {{ result['ph']['advice'] }}
+        </div>
+      </div>
+
+      <!-- 💧 Irrigation Guidance Card -->
+      <div class="card" style="margin-bottom: 24px; border-left: 4px solid #0284c7;">
+        <div class="card-header" style="padding-bottom: 10px; margin-bottom: 12px;">
+          <div class="card-title-box">
+            <i class="fa-solid fa-droplet" style="color: #0284c7;"></i>
+            <div>
+              <h3 class="card-title">💧 Precision Irrigation Guidance</h3>
+              <p class="card-subtitle">Real-time water scheduling based on current root zone moisture</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem;">
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+            <span style="color: var(--text-muted); font-weight: 600;">Current Soil Moisture:</span>
+            <strong style="color: #0284c7;">{{ result['moisture']['value'] }}% ({{ result['moisture']['status'] }})</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+            <span style="color: var(--text-muted); font-weight: 600;">Water Requirement:</span>
+            <strong>{{ result['moisture']['water_need'] }}</strong>
+          </div>
+          <div style="background: #f0f9ff; padding: 10px 14px; border-radius: var(--radius-sm); color: #0369a1; font-weight: 600;">
+            <i class="fa-regular fa-clock" style="margin-right: 4px;"></i> {{ result['moisture']['timing'] }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- 🧴 FERTILIZER RECOMMENDATIONS & APPLICATION ADVISORY -->
+{% if result %}
+<div class="card" style="margin-top: 28px;">
+  <div class="card-header">
+    <div class="card-title-box">
+      <i class="fa-solid fa-spray-can-sparkles" style="color: var(--secondary);"></i>
+      <div>
+        <h3 class="card-title">🧴 Scientific Fertilizer Dosage Schedule</h3>
+        <p class="card-subtitle">Prescribed quantities tailored to your exact soil deficit and crop stage</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="gap: 20px;">
+    <!-- Recommended Fertilizers List -->
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      {% for fert in result['fertilizers'] %}
+        <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 16px; border-left: 4px solid var(--secondary); box-shadow: var(--shadow-sm);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+            <div style="font-weight: 700; font-size: 1rem; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+              <i class="{{ fert['icon'] }}" style="color: var(--secondary);"></i>
+              <span>{{ fert['name'] }}</span>
+            </div>
+            <span class="badge badge-success">{{ fert['dosage'] }}</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
+            Target Nutrient: <strong style="color: var(--primary);">{{ fert['nutrient'] }}</strong>
+          </div>
+          <p style="font-size: 0.86rem; color: var(--text-main); line-height: 1.45;">
+            {{ fert['timing'] }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Application Precautions Box -->
+    <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: 22px;">
+      <h4 style="font-size: 1.05rem; font-weight: 700; color: #92400e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-triangle-exclamation" style="color: #d97706;"></i>
+        <span>Crucial Fertilizer Precautions</span>
+      </h4>
+      <ul style="padding-left: 20px; font-size: 0.88rem; color: #78350f; display: flex; flex-direction: column; gap: 10px;">
+        {% for p in result['precautions'] %}
+          <li>{{ p }}</li>
+        {% endfor %}
+      </ul>
+
+      <div style="margin-top: 20px; padding: 12px; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid #fef3c7; font-size: 0.82rem; color: #92400e;">
+        <strong>💡 Agronomist Tip:</strong> Always conduct soil tests every 2-3 seasons and incorporate green manuring crops to replenish beneficial soil microbial flora.
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

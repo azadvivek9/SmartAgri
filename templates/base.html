@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AgriSmart — AI Powered Smart Agriculture Advisory System for Precision Farming, Weather Forecasts, Soil Health, Mandi Prices and Crop Disease Diagnostics.">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{% block title %}Dashboard{% endblock %} — AgriSmart Advisory</title>
+
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- AgriSmart Main Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<div class="app-wrapper">
+  <!-- Mobile Backdrop Overlay -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- FIXED LEFT SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <!-- Brand Header -->
+    <div class="sidebar-brand">
+      <div class="brand-info">
+        <div class="brand-icon">
+          <i class="fa-solid fa-seedling"></i>
+        </div>
+        <div class="brand-text">
+          <h2>AgriSmart</h2>
+          <p>Smart Agriculture Advisory</p>
+        </div>
+      </div>
+      <button class="sidebar-close-btn" id="closeSidebarBtn" aria-label="Close Sidebar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Main Navigation Menu -->
+    <nav class="sidebar-nav">
+      {% if session.get('user_role') == 'admin' %}
+      <div class="nav-section-title" style="color: #9333ea;">Administration</div>
+      
+      <a href="{{ url_for('admin.index') }}" class="nav-item {% if request.endpoint and request.endpoint == 'admin.index' %}active{% endif %}" style="{% if request.endpoint and request.endpoint == 'admin.index' %}background: #f3e8ff; color: #7e22ce; border-left-color: #9333ea;{% endif %}">
+        <i class="fa-solid fa-gauge-high" style="color: #9333ea;"></i>
+        <span>Admin Overview</span>
+      </a>
+
+      <a href="{{ url_for('admin.users_list') }}" class="nav-item {% if request.endpoint and request.endpoint == 'admin.users_list' %}active{% endif %}" style="{% if request.endpoint and request.endpoint == 'admin.users_list' %}background: #f3e8ff; color: #7e22ce; border-left-color: #9333ea;{% endif %}">
+        <i class="fa-solid fa-users-gear" style="color: #9333ea;"></i>
+        <span>User Management</span>
+      </a>
+      {% endif %}
+
+      <div class="nav-section-title">Advisory Suite</div>
+      
+      <a href="{{ url_for('dashboard.index') }}" class="nav-item {% if request.endpoint and request.endpoint == 'dashboard.index' %}active{% endif %}">
+        <i class="fa-solid fa-house"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="{{ url_for('weather.index') }}" class="nav-item {% if request.endpoint and 'weather' in request.endpoint %}active{% endif %}">
+        <i class="fa-solid fa-cloud-sun-rain"></i>
+        <span>Weather Advisory</span>
+      </a>
+
+      <a href="{{ url_for('crop.index') }}" class="nav-item {% if request.endpoint and 'crop' in request.endpoint %}active{% endif %}">
+        <i class="fa-solid fa-wheat-awn"></i>
+        <span>Crop Recommendation</span>
+      </a>
+
+      <a href="{{ url_for('soil.index') }}" class="nav-item {% if request.endpoint and 'soil' in request.endpoint %}active{% endif %}">
+        <i class="fa-solid fa-vial-circle-check"></i>
+        <span>Soil Analysis</span>
+      </a>
+
+      <a href="{{ url_for('mandi.index') }}" class="nav-item {% if request.endpoint and 'mandi' in request.endpoint %}active{% endif %}">
+        <i class="fa-solid fa-coins"></i>
+        <span>Mandi / Market Price</span>
+      </a>
+
+      <a href="{{ url_for('disease.index') }}" class="nav-item {% if request.endpoint and 'disease' in request.endpoint %}active{% endif %}">
+        <i class="fa-solid fa-bug"></i>
+        <span>Crop Disease Detection</span>
+      </a>
+    </nav>
+
+    <!-- Bottom Sidebar Section -->
+    <div class="sidebar-footer">
+      <div class="nav-section-title">Account</div>
+      
+      <a href="{{ url_for('profile.index') }}" class="nav-item {% if request.endpoint and 'profile' in request.endpoint %}active{% endif %}">
+        <i class="fa-solid fa-user-gear"></i>
+        <span>Farmer Profile</span>
+      </a>
+
+      <a href="{{ url_for('settings.index') }}" class="nav-item {% if request.endpoint and 'settings' in request.endpoint %}active{% endif %}">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Settings</span>
+      </a>
+
+      <a href="{{ url_for('auth.logout') }}" class="nav-item logout">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN VIEWPORT CONTENT -->
+  <div class="main-content">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="header-title-box">
+          <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+          <div class="breadcrumbs">
+            <a href="{{ url_for('dashboard.index') }}">AgriSmart</a>
+            <span>/</span>
+            <span>{% block breadcrumb_item %}Overview{% endblock %}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Global Location Selector -->
+        <div class="global-location-selector-wrap" style="display: flex; align-items: center; gap: 8px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 6px 14px; border-radius: var(--radius-full); box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+          <i class="fa-solid fa-location-dot" style="color: #15803d; font-size: 0.95rem;"></i>
+          <span style="font-size: 0.82rem; font-weight: 700; color: #166534; white-space: nowrap;">Location:</span>
+          <select id="globalLocationSelect" style="background: transparent; border: none; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: #166534; cursor: pointer; outline: none; padding-right: 4px;">
+            <option value="Patna, Bihar, India" data-lat="25.5941" data-lon="85.1376" data-city="Patna" data-state="Bihar" data-country="India">Patna, Bihar, India</option>
+            <option value="Meerut, Uttar Pradesh, India" data-lat="28.9845" data-lon="77.7064" data-city="Meerut" data-state="Uttar Pradesh" data-country="India">Meerut, Uttar Pradesh, India</option>
+            <option value="Delhi, India" data-lat="28.6139" data-lon="77.2090" data-city="Delhi" data-state="Delhi" data-country="India">Delhi, India</option>
+            <option value="Lucknow, Uttar Pradesh, India" data-lat="26.8467" data-lon="80.9462" data-city="Lucknow" data-state="Uttar Pradesh" data-country="India">Lucknow, Uttar Pradesh, India</option>
+            <option value="Chandigarh, India" data-lat="30.7333" data-lon="76.7794" data-city="Chandigarh" data-state="Punjab/Haryana" data-country="India">Chandigarh, India</option>
+            <option value="Jaipur, Rajasthan, India" data-lat="26.9124" data-lon="75.7873" data-city="Jaipur" data-state="Rajasthan" data-country="India">Jaipur, Rajasthan, India</option>
+            <option value="Bhopal, Madhya Pradesh, India" data-lat="23.2599" data-lon="77.4126" data-city="Bhopal" data-state="Madhya Pradesh" data-country="India">Bhopal, Madhya Pradesh, India</option>
+            <option value="Pune, Maharashtra, India" data-lat="18.5204" data-lon="73.8567" data-city="Pune" data-state="Maharashtra" data-country="India">Pune, Maharashtra, India</option>
+            <option value="Ahmedabad, Gujarat, India" data-lat="23.0225" data-lon="72.5714" data-city="Ahmedabad" data-state="Gujarat" data-country="India">Ahmedabad, Gujarat, India</option>
+            <option value="Kolkata, West Bengal, India" data-lat="22.5726" data-lon="88.3639" data-city="Kolkata" data-state="West Bengal" data-country="India">Kolkata, West Bengal, India</option>
+            <option value="Hyderabad, Telangana, India" data-lat="17.3850" data-lon="78.4867" data-city="Hyderabad" data-state="Telangana" data-country="India">Hyderabad, Telangana, India</option>
+            <option value="Bengaluru, Karnataka, India" data-lat="12.9716" data-lon="77.5946" data-city="Bengaluru" data-state="Karnataka" data-country="India">Bengaluru, Karnataka, India</option>
+            <option value="Chennai, Tamil Nadu, India" data-lat="13.0827" data-lon="80.2707" data-city="Chennai" data-state="Tamil Nadu" data-country="India">Chennai, Tamil Nadu, India</option>
+            <option value="Mumbai, Maharashtra, India" data-lat="19.0760" data-lon="72.8777" data-city="Mumbai" data-state="Maharashtra" data-country="India">Mumbai, Maharashtra, India</option>
+          </select>
+        </div>
+
+        <!-- Notification Center -->
+        <div class="notif-wrapper">
+          <button class="icon-button" id="notifTrigger" title="Notifications">
+            <i class="fa-regular fa-bell"></i>
+            <span class="notif-badge"></span>
+          </button>
+          
+          <div class="dropdown-panel" id="notifDropdown">
+            <div style="padding: 10px 16px; border-bottom: 1px solid var(--border-light); font-weight: 700; color: var(--text-heading); display: flex; justify-content: space-between; align-items: center;">
+              <span>Agri Alerts</span>
+              <span class="badge badge-success" style="font-size: 0.7rem;">3 New</span>
+            </div>
+            <a href="{{ url_for('weather.index') }}" class="dropdown-item">
+              <i class="fa-solid fa-cloud-rain" style="color: #0284c7;"></i>
+              <div>
+                <strong style="display:block; font-size: 0.84rem;">Rain Expected Tomorrow</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Hold off scheduled irrigation</span>
+              </div>
+            </a>
+            <a href="{{ url_for('mandi.index') }}" class="dropdown-item">
+              <i class="fa-solid fa-arrow-trend-up" style="color: #16a34a;"></i>
+              <div>
+                <strong style="display:block; font-size: 0.84rem;">Wheat Price Up +₹45</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Meerut Mandi: ₹2,450/Qtl</span>
+              </div>
+            </a>
+            <a href="{{ url_for('soil.index') }}" class="dropdown-item">
+              <i class="fa-solid fa-flask" style="color: #d97706;"></i>
+              <div>
+                <strong style="display:block; font-size: 0.84rem;">Soil NPK Test Updated</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Nitrogen level recommendation</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- User Profile Dropdown -->
+        <div class="user-profile-menu" id="userProfileTrigger">
+          <img src="{{ url_for('static', filename='images/farmer_avatar.svg') }}" alt="User Avatar" class="avatar-sm">
+          <div class="user-info-text">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="user-name">{{ session.get('user_name', 'Ramesh Patel') }}</span>
+              {% if session.get('user_role') == 'admin' %}
+                <span class="badge" style="background: #9333ea; color: #ffffff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 700;">ADMIN</span>
+              {% endif %}
+            </div>
+            <span class="user-role">{{ session.get('user_location', 'Meerut, UP') }}</span>
+          </div>
+          <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+
+          <!-- User Menu Dropdown -->
+          <div class="dropdown-panel" id="userProfileDropdown">
+            <div style="padding: 12px 18px; border-bottom: 1px solid var(--border-light);">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="font-weight: 700; color: var(--text-heading);">{{ session.get('user_name', 'Ramesh Patel') }}</div>
+                {% if session.get('user_role') == 'admin' %}
+                  <span class="badge" style="background: #f3e8ff; color: #7e22ce; font-size: 0.68rem; font-weight: 700; border: 1px solid #d8b4fe;">Admin</span>
+                {% else %}
+                  <span class="badge" style="background: #dcfce7; color: #15803d; font-size: 0.68rem; font-weight: 700; border: 1px solid #86efac;">Farmer</span>
+                {% endif %}
+              </div>
+              <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">{{ session.get('user_email', 'farmer@agrismart.io') }}</div>
+            </div>
+
+            {% if session.get('user_role') == 'admin' %}
+            <a href="{{ url_for('admin.index') }}" class="dropdown-item">
+              <i class="fa-solid fa-gauge-high" style="color: #9333ea;"></i>
+              <span>Admin Overview</span>
+            </a>
+            <a href="{{ url_for('admin.users_list') }}" class="dropdown-item">
+              <i class="fa-solid fa-users-gear" style="color: #9333ea;"></i>
+              <span>User Management</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            {% endif %}
+
+            <a href="{{ url_for('profile.index') }}" class="dropdown-item">
+              <i class="fa-regular fa-user"></i>
+              <span>Farm Profile</span>
+            </a>
+            <a href="{{ url_for('settings.index') }}" class="dropdown-item">
+              <i class="fa-solid fa-sliders"></i>
+              <span>Preferences & Alerts</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ url_for('auth.logout') }}" class="dropdown-item" style="color: #dc2626;">
+              <i class="fa-solid fa-arrow-right-from-bracket" style="color: #dc2626;"></i>
+              <span>Sign Out</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE BODY -->
+    <main class="page-body">
+      <!-- Flash Alert Banners -->
+      <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'danger' %}fa-circle-exclamation{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                <span>{{ message }}</span>
+                <button class="alert-close" aria-label="Close Alert">&times;</button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
+
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+<!-- AgriSmart Vanilla JS -->
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

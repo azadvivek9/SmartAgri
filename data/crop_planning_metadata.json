@@ -1,0 +1,1581 @@
+{
+  "Rice": {
+    "season": "Kharif (Monsoon)",
+    "sowing_period": "June \u2013 July",
+    "sowing_months": [
+      6,
+      7
+    ],
+    "harvest_period": "October \u2013 November",
+    "temperature": "20 \u2013 35\u00b0C",
+    "temp_desc": "Best growth occurs in warm, humid weather with ample sunshine.",
+    "rainfall": "1000 \u2013 1800 mm",
+    "soil_type": "Clayey loam, alluvial soil with good water retention",
+    "soil_ph": "5.5 \u2013 7.2",
+    "water_requirement": "High (1200 \u2013 1500 mm)",
+    "growing_duration": "120 \u2013 150 Days",
+    "important_conditions": [
+      "Maintain 3-5 cm standing water during tillering and panicle initiation.",
+      "Warm humid climate with average temperature above 20\u00b0C is essential.",
+      "Heavy clay loam or silty clay soils hold water optimally for puddle transplanting."
+    ],
+    "farming_practices": [
+      "Transplant 21-25 day old seedlings at 20x15 cm spacing.",
+      "Apply basal dose of Zinc Sulfate (25 kg/ha) with NPK mixture.",
+      "Drain excess water 10 days prior to harvesting to promote uniform grain ripening."
+    ],
+    "icon": "fa-solid fa-wheat-awn"
+  },
+  "Wheat": {
+    "season": "Rabi (Winter)",
+    "sowing_period": "October \u2013 November",
+    "sowing_months": [
+      10,
+      11
+    ],
+    "harvest_period": "March \u2013 April",
+    "temperature": "12 \u2013 25\u00b0C",
+    "temp_desc": "Requires cool vegetative period and warm sunny days during grain filling.",
+    "rainfall": "350 \u2013 650 mm",
+    "soil_type": "Well-drained fertile loam and clay loam",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Medium (450 \u2013 650 mm)",
+    "growing_duration": "110 \u2013 135 Days",
+    "important_conditions": [
+      "Cool temperatures during germination and tillering maximize earhead count.",
+      "Strictly avoid waterlogging; good subsurface drainage is vital.",
+      "Require 4-6 timely irrigations at critical growth stages (CRI, tillering, flowering)."
+    ],
+    "farming_practices": [
+      "Sow using seed-cum-fertilizer drill at 20-22 cm row spacing.",
+      "First irrigation must be applied at Crown Root Initiation (21 days after sowing).",
+      "Apply nitrogen in split doses: 50% basal, 25% at 1st irrigation, 25% at 2nd irrigation."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Maize": {
+    "season": "Kharif / Spring (Summer)",
+    "sowing_period": "June \u2013 July (Kharif) / Feb \u2013 March (Spring)",
+    "sowing_months": [
+      6,
+      7,
+      2,
+      3
+    ],
+    "harvest_period": "September \u2013 October / May \u2013 June",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Prefers warm sunny climate; susceptible to early frost and stagnant water.",
+    "rainfall": "500 \u2013 800 mm",
+    "soil_type": "Deep, fertile, well-drained sandy loam or silt loam",
+    "soil_ph": "5.8 \u2013 7.5",
+    "water_requirement": "Medium (500 \u2013 750 mm)",
+    "growing_duration": "90 \u2013 115 Days",
+    "important_conditions": [
+      "High sensitivity to water stagnation; field must have drainage channels.",
+      "Ample sunlight and uniform soil moisture during tasseling and silking.",
+      "Deep friable seedbed with rich organic matter encourages strong root anchorage."
+    ],
+    "farming_practices": [
+      "Plant seeds at 60 cm row spacing and 20 cm plant spacing with 4-5 cm depth.",
+      "Apply adequate potash to reinforce stalk strength against wind lodging.",
+      "Monitor closely for Fall Armyworm during the first 30 days of seedling emergence."
+    ],
+    "icon": "fa-solid fa-cubes-stacked"
+  },
+  "Sugarcane": {
+    "season": "Whole Year / Annual",
+    "sowing_period": "February \u2013 March (Spring) / Oct \u2013 Nov (Autumn)",
+    "sowing_months": [
+      2,
+      3,
+      10,
+      11
+    ],
+    "harvest_period": "December \u2013 March (Next Year)",
+    "temperature": "20 \u2013 38\u00b0C",
+    "temp_desc": "Thrives in tropical warm humid weather with long sunshine hours.",
+    "rainfall": "1500 \u2013 2200 mm",
+    "soil_type": "Deep alluvial loam with high water holding capacity",
+    "soil_ph": "6.0 \u2013 7.8",
+    "water_requirement": "Very High (1500 \u2013 2200 mm)",
+    "growing_duration": "300 \u2013 365 Days",
+    "important_conditions": [
+      "Abundant moisture and high nutrient reservoir throughout vegetative phase.",
+      "Dry, sunny, and cool weather at ripening stage enhances sucrose concentration.",
+      "Requires deep plowing and heavy organic manure incorporation before planting."
+    ],
+    "farming_practices": [
+      "Plant 2-3 budded setts treated with Carbendazim fungicide.",
+      "Perform earthing up in 3rd-4th month to support tall canes against wind lodging.",
+      "Adopt trash mulching between rows to conserve moisture and suppress weeds."
+    ],
+    "icon": "fa-solid fa-tree"
+  },
+  "Cotton(lint)": {
+    "season": "Kharif (Monsoon)",
+    "sowing_period": "April \u2013 May (North) / June \u2013 July (Central/South)",
+    "sowing_months": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "harvest_period": "October \u2013 December",
+    "temperature": "21 \u2013 35\u00b0C",
+    "temp_desc": "Warm growing period with abundant sunshine and frost-free days.",
+    "rainfall": "600 \u2013 1100 mm",
+    "soil_type": "Deep black clayey soils (Regur) or fertile alluvial loam",
+    "soil_ph": "6.0 \u2013 8.0",
+    "water_requirement": "Medium to High (700 \u2013 1100 mm)",
+    "growing_duration": "150 \u2013 180 Days",
+    "important_conditions": [
+      "Warm days and cool nights promote active boll opening and lint development.",
+      "Needs 180-200 frost-free days with steady soil moisture during flowering.",
+      "Excessive rainfall or overcast sky during flowering causes heavy square drop."
+    ],
+    "farming_practices": [
+      "Maintain plant spacing of 90x60 cm or 67.5x30 cm depending on hybrid variety.",
+      "Install pheromone traps (5/acre) to scout for pink bollworm infestations.",
+      "Foliar spray of 2% DAP at peak flowering to reduce square and boll shedding."
+    ],
+    "icon": "fa-solid fa-cloud"
+  },
+  "Potato": {
+    "season": "Rabi (Winter)",
+    "sowing_period": "October \u2013 November",
+    "sowing_months": [
+      10,
+      11
+    ],
+    "harvest_period": "January \u2013 March",
+    "temperature": "14 \u2013 24\u00b0C",
+    "temp_desc": "Cool nights (15-18\u00b0C) are critical for rapid tuber initiation and bulking.",
+    "rainfall": "350 \u2013 550 mm",
+    "soil_type": "Loose, friable sandy loam rich in potassium and organic matter",
+    "soil_ph": "5.2 \u2013 6.8",
+    "water_requirement": "Medium (400 \u2013 550 mm)",
+    "growing_duration": "80 \u2013 110 Days",
+    "important_conditions": [
+      "Soil must be well aerated, porous, and free from hard clods or compaction.",
+      "Night temperature above 22\u00b0C significantly reduces tuber formation.",
+      "Uniform light irrigations at 7-10 day intervals prevent skin cracking."
+    ],
+    "farming_practices": [
+      "Use disease-free, well-sprouted seed tubers of 35-45g weight.",
+      "Perform proper earthing up at 30 days to protect tubers from sunlight greening.",
+      "Spray Mancozeb prophylactically to guard against early and late blight."
+    ],
+    "icon": "fa-solid fa-circle"
+  },
+  "Groundnut": {
+    "season": "Kharif / Summer",
+    "sowing_period": "June \u2013 July (Kharif) / Jan \u2013 Feb (Summer)",
+    "sowing_months": [
+      6,
+      7,
+      1,
+      2
+    ],
+    "harvest_period": "October \u2013 November / May \u2013 June",
+    "temperature": "22 \u2013 32\u00b0C",
+    "temp_desc": "Warm tropical weather with moderate rainfall supports vigorous pod formation.",
+    "rainfall": "500 \u2013 750 mm",
+    "soil_type": "Light sandy loam, red sandy soil with friable loose texture",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Medium (500 \u2013 650 mm)",
+    "growing_duration": "105 \u2013 125 Days",
+    "important_conditions": [
+      "Loose sandy soil structure facilitates easy gynophore (peg) soil penetration.",
+      "Avoid heavy clay soils that harden upon drying and hinder pegging.",
+      "Adequate calcium availability in the fruiting zone is essential for pod filling."
+    ],
+    "farming_practices": [
+      "Inoculate seeds with Rhizobium culture and Trichoderma before planting.",
+      "Apply Gypsum @ 200 kg/acre at pegging stage (40-45 DAS) for superior pod filling.",
+      "Avoid intercultivation once peg penetration begins to avoid disturbing pods."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Rapeseed &Mustard": {
+    "season": "Rabi (Winter)",
+    "sowing_period": "September \u2013 October",
+    "sowing_months": [
+      9,
+      10
+    ],
+    "harvest_period": "February \u2013 March",
+    "temperature": "10 \u2013 25\u00b0C",
+    "temp_desc": "Cool crisp winter climate promotes flowering and maximum seed oil content.",
+    "rainfall": "300 \u2013 450 mm",
+    "soil_type": "Sandy loam to clay loam with good internal drainage",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Low to Medium (300 \u2013 450 mm)",
+    "growing_duration": "100 \u2013 125 Days",
+    "important_conditions": [
+      "Early sowing in October avoids aphid infestation during peak winter.",
+      "Requires sulfur-rich soil for optimal oil synthesis.",
+      "Frost-free clear weather during flowering and siliqua formation."
+    ],
+    "farming_practices": [
+      "Apply elemental Sulfur or gypsum (20-30 kg/ha) during final land preparation.",
+      "Thin seedlings to 10-15 cm spacing within rows at 15-20 days after sowing.",
+      "Provide first irrigation at rosette stage (30-35 days) and second at pod formation."
+    ],
+    "icon": "fa-solid fa-spa"
+  },
+  "Moong(Green Gram)": {
+    "season": "Kharif / Summer (Zaid)",
+    "sowing_period": "June \u2013 July (Kharif) / March \u2013 April (Zaid)",
+    "sowing_months": [
+      6,
+      7,
+      3,
+      4
+    ],
+    "harvest_period": "August \u2013 September / May \u2013 June",
+    "temperature": "25 \u2013 35\u00b0C",
+    "temp_desc": "Thrives in warm sunny weather; quick growing short-duration pulse.",
+    "rainfall": "350 \u2013 500 mm",
+    "soil_type": "Well-drained fertile loam or sandy loam",
+    "soil_ph": "6.2 \u2013 7.8",
+    "water_requirement": "Low to Medium (350 \u2013 450 mm)",
+    "growing_duration": "60 \u2013 75 Days",
+    "important_conditions": [
+      "Quick maturing crop; ideal for crop rotation between wheat and rice.",
+      "Highly sensitive to waterlogging and cloudy weather during flowering.",
+      "Active nodulation enriches residual soil nitrogen for subsequent crops."
+    ],
+    "farming_practices": [
+      "Treat seeds with Rhizobium culture and Phosphorus Solubilizing Bacteria (PSB).",
+      "Ensure one light irrigation at flowering and another at pod development in summer.",
+      "Spray bio-pesticides or Neem formulation to check whitefly and yellow mosaic virus."
+    ],
+    "icon": "fa-solid fa-leaf"
+  },
+  "Urad": {
+    "season": "Kharif / Summer (Zaid)",
+    "sowing_period": "June \u2013 July (Kharif) / Feb \u2013 March (Summer)",
+    "sowing_months": [
+      6,
+      7,
+      2,
+      3
+    ],
+    "harvest_period": "September \u2013 October / May \u2013 June",
+    "temperature": "25 \u2013 35\u00b0C",
+    "temp_desc": "Prefers hot humid climate during vegetative growth and clear dry harvest.",
+    "rainfall": "400 \u2013 600 mm",
+    "soil_type": "Deep loamy to clayey soil with good moisture holding capacity",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Low to Medium (400 \u2013 500 mm)",
+    "growing_duration": "70 \u2013 85 Days",
+    "important_conditions": [
+      "Tolerates moderate drought; requires good drainage to avoid root rot.",
+      "Warm climate with temperature around 30\u00b0C promotes profuse flowering.",
+      "Avoid heavy water stagnation during peak monsoon spells."
+    ],
+    "farming_practices": [
+      "Perform seed treatment with Thiram (2g) + Carbendazim (1g) per kg seed.",
+      "Apply basal dose of DAP (50 kg/ha) at time of sowing for early vigor.",
+      "Pick pods when 80% turn dark brown or black to prevent pod shattering."
+    ],
+    "icon": "fa-solid fa-leaf"
+  },
+  "Gram": {
+    "season": "Rabi (Winter)",
+    "sowing_period": "October \u2013 November",
+    "sowing_months": [
+      10,
+      11
+    ],
+    "harvest_period": "February \u2013 March",
+    "temperature": "15 \u2013 28\u00b0C",
+    "temp_desc": "Cool vegetative climate and warm dry weather during maturity.",
+    "rainfall": "250 \u2013 400 mm",
+    "soil_type": "Well-drained medium to heavy loam soil",
+    "soil_ph": "6.0 \u2013 7.8",
+    "water_requirement": "Low (250 \u2013 350 mm)",
+    "growing_duration": "95 \u2013 115 Days",
+    "important_conditions": [
+      "Thrives under rainfed conditions on residual conserved soil moisture.",
+      "Frost during flowering and pod development causes significant flower drop.",
+      "Over-irrigation leads to excessive vegetative growth at the expense of pod setting."
+    ],
+    "farming_practices": [
+      "Practice deep sowing (8-10 cm) to utilize sub-soil moisture efficiently.",
+      "Nip terminal buds at 30-35 days to stimulate extensive lateral branching.",
+      "Install T-shaped bird perches (15-20/acre) for biological pod borer management."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Arhar/Tur": {
+    "season": "Kharif (Monsoon)",
+    "sowing_period": "June \u2013 July",
+    "sowing_months": [
+      6,
+      7
+    ],
+    "harvest_period": "December \u2013 February",
+    "temperature": "20 \u2013 35\u00b0C",
+    "temp_desc": "Warm tropical weather during vegetative phase, cool dry weather at maturity.",
+    "rainfall": "600 \u2013 900 mm",
+    "soil_type": "Deep, well-drained loam or clay loam with no hard pan",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Medium (600 \u2013 800 mm)",
+    "growing_duration": "150 \u2013 180 Days",
+    "important_conditions": [
+      "Deep taproot system enables survival across prolonged dry intervals.",
+      "Extremely sensitive to waterlogging; best grown on ridges or raised beds.",
+      "Long duration enables beneficial intercropping with short pulses or millets."
+    ],
+    "farming_practices": [
+      "Adopt Broad Bed and Furrow (BBF) or ridge planting to protect from collar rot.",
+      "Inoculate seeds with Rhizobium and Trichoderma prior to sowing.",
+      "Spray Emamectin Benzoate or Neem oil at 50% flowering to control pod borers."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Sesamum": {
+    "season": "Kharif / Summer",
+    "sowing_period": "June \u2013 July (Kharif) / Feb \u2013 March (Summer)",
+    "sowing_months": [
+      6,
+      7,
+      2,
+      3
+    ],
+    "harvest_period": "September \u2013 October / May \u2013 June",
+    "temperature": "25 \u2013 35\u00b0C",
+    "temp_desc": "High heat tolerance; requires warm weather throughout its lifecycle.",
+    "rainfall": "300 \u2013 500 mm",
+    "soil_type": "Well-drained light sandy loam or loamy soil",
+    "soil_ph": "5.5 \u2013 7.5",
+    "water_requirement": "Low (300 \u2013 400 mm)",
+    "growing_duration": "80 \u2013 95 Days",
+    "important_conditions": [
+      "Drought resilient oilseed crop ideal for light soils and low rainfall zones.",
+      "Cannot tolerate water stagnation even for a few hours.",
+      "Requires fine, firm seedbed because seeds are small and delicate."
+    ],
+    "farming_practices": [
+      "Mix tiny seeds with sand (1:4 ratio) to ensure even distribution during sowing.",
+      "Thin plants to 15 cm spacing within 20 days of germination.",
+      "Harvest when lower leaves drop and bottom capsules start turning yellowish."
+    ],
+    "icon": "fa-solid fa-spa"
+  },
+  "Bajra": {
+    "season": "Kharif (Monsoon)",
+    "sowing_period": "June \u2013 July",
+    "sowing_months": [
+      6,
+      7
+    ],
+    "harvest_period": "September \u2013 October",
+    "temperature": "25 \u2013 38\u00b0C",
+    "temp_desc": "Highly tolerant to high temperature, heat waves, and intense sunlight.",
+    "rainfall": "350 \u2013 550 mm",
+    "soil_type": "Sandy loam, light red soil, and well-drained alluvial soil",
+    "soil_ph": "6.0 \u2013 8.0",
+    "water_requirement": "Low (300 \u2013 450 mm)",
+    "growing_duration": "75 \u2013 90 Days",
+    "important_conditions": [
+      "C4 crop with exceptional water-use efficiency under arid conditions.",
+      "Requires hot dry weather during grain filling and maturity.",
+      "Very low nutrient demand compared to major cereals."
+    ],
+    "farming_practices": [
+      "Sow with onset of monsoon showers at 45x15 cm spacing.",
+      "Top-dress nitrogen (30 kg/ha) at 25-30 days after intercultivation.",
+      "Harvest earheads when grain moisture drops below 15%."
+    ],
+    "icon": "fa-solid fa-wheat-awn"
+  },
+  "Jowar": {
+    "season": "Kharif / Rabi",
+    "sowing_period": "June \u2013 July (Kharif) / September \u2013 October (Rabi)",
+    "sowing_months": [
+      6,
+      7,
+      9,
+      10
+    ],
+    "harvest_period": "October \u2013 November / January \u2013 February",
+    "temperature": "20 \u2013 35\u00b0C",
+    "temp_desc": "Drought-tolerant dual-purpose crop providing high-grade grain and fodder.",
+    "rainfall": "400 \u2013 650 mm",
+    "soil_type": "Medium to deep black soils, heavy loam and alluvial soils",
+    "soil_ph": "6.0 \u2013 8.5",
+    "water_requirement": "Low to Medium (400 \u2013 600 mm)",
+    "growing_duration": "100 \u2013 125 Days",
+    "important_conditions": [
+      "Sturdy fibrous root system extracts deep moisture under drought stress.",
+      "Tolerates temporary waterlogging better than maize and pearl millet.",
+      "Dual benefit: food grain plus rich livestock green fodder."
+    ],
+    "farming_practices": [
+      "Maintain plant population of ~1.5 to 1.8 lakh plants per hectare.",
+      "Treat seed with Imidacloprid to prevent shoot fly damage during early stage.",
+      "Apply balanced fertilization to enhance dual grain and biomass yield."
+    ],
+    "icon": "fa-solid fa-wheat-awn"
+  },
+  "Onion": {
+    "season": "Rabi / Kharif",
+    "sowing_period": "October \u2013 November (Rabi) / May \u2013 June (Kharif)",
+    "sowing_months": [
+      10,
+      11,
+      5,
+      6
+    ],
+    "harvest_period": "March \u2013 May (Rabi) / October \u2013 November (Kharif)",
+    "temperature": "13 \u2013 28\u00b0C",
+    "temp_desc": "Cool vegetative stage followed by warm dry weather for bulb maturation.",
+    "rainfall": "500 \u2013 750 mm",
+    "soil_type": "Friable sandy loam to clay loam rich in organic carbon",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Medium (500 \u2013 700 mm)",
+    "growing_duration": "110 \u2013 135 Days",
+    "important_conditions": [
+      "Requires loose friable soil for unhindered bulb expansion.",
+      "Sensitive to extreme water stress or sudden water stagnation.",
+      "Dry weather during maturity prevents bulb rotting and enhances shelf life."
+    ],
+    "farming_practices": [
+      "Transplant 6-7 week old vigorous seedlings on raised flat beds.",
+      "Stop irrigation 10-15 days prior to harvest to allow outer scale curing.",
+      "Cure harvested bulbs in shade for 7-10 days to maximize storage duration."
+    ],
+    "icon": "fa-solid fa-circle-dot"
+  },
+  "Soyabean": {
+    "season": "Kharif (Monsoon)",
+    "sowing_period": "June \u2013 July",
+    "sowing_months": [
+      6,
+      7
+    ],
+    "harvest_period": "September \u2013 October",
+    "temperature": "20 \u2013 32\u00b0C",
+    "temp_desc": "Warm humid monsoon weather with good sunshine during vegetative phase.",
+    "rainfall": "600 \u2013 850 mm",
+    "soil_type": "Deep, well-drained fertile black soil or alluvial loam",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Medium (600 \u2013 800 mm)",
+    "growing_duration": "90 \u2013 110 Days",
+    "important_conditions": [
+      "Needs consistent soil moisture during flowering and pod development.",
+      "Sensitive to water stagnation at seedling stage.",
+      "Rhizobium inoculation provides major portion of plant nitrogen."
+    ],
+    "farming_practices": [
+      "Inoculate seeds with Bradyrhizobium japonicum before sowing.",
+      "Sow in lines at 45 cm row spacing and 4-5 cm seed depth.",
+      "Harvest when leaves turn yellow and drop and pods become dry brown."
+    ],
+    "icon": "fa-solid fa-cubes"
+  },
+  "Sunflower": {
+    "season": "Kharif / Rabi / Zaid",
+    "sowing_period": "June \u2013 July (Kharif) / Oct \u2013 Nov (Rabi) / Jan \u2013 Feb (Zaid)",
+    "sowing_months": [
+      6,
+      7,
+      10,
+      11,
+      1,
+      2
+    ],
+    "harvest_period": "September \u2013 October / Feb \u2013 March / April \u2013 May",
+    "temperature": "18 \u2013 34\u00b0C",
+    "temp_desc": "Photo-insensitive crop adaptable across seasons with moderate climate.",
+    "rainfall": "450 \u2013 700 mm",
+    "soil_type": "Medium deep loam, black soil and alluvial soil with good drainage",
+    "soil_ph": "6.0 \u2013 8.0",
+    "water_requirement": "Medium (450 \u2013 600 mm)",
+    "growing_duration": "85 \u2013 105 Days",
+    "important_conditions": [
+      "Deep taproot system efficiently extracts subsoil moisture.",
+      "Requires clear dry weather during flowering for high bee pollination activity.",
+      "Boron application is critical to avoid hollow or chaffy seeds."
+    ],
+    "farming_practices": [
+      "Foliar spray of Borax (0.2%) at ray floret opening stage to improve seed setting.",
+      "Maintain beehives (2-3/acre) or practice hand pollination in morning hours.",
+      "Harvest when the back of head turns lemon yellow and bracts turn brown."
+    ],
+    "icon": "fa-solid fa-sun"
+  },
+  "Banana": {
+    "season": "Whole Year",
+    "sowing_period": "June \u2013 July / September \u2013 October",
+    "sowing_months": [
+      6,
+      7,
+      9,
+      10
+    ],
+    "harvest_period": "10 \u2013 12 Months after planting",
+    "temperature": "20 \u2013 35\u00b0C",
+    "temp_desc": "Tropical humid warm climate with high humidity and abundant sunlight.",
+    "rainfall": "1500 \u2013 2200 mm",
+    "soil_type": "Deep fertile alluvial loam with high organic carbon and good drainage",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "High (1500 \u2013 2000 mm)",
+    "growing_duration": "300 \u2013 365 Days",
+    "important_conditions": [
+      "Continuous soil moisture and high potassium supply are vital for heavy bunch yield.",
+      "Protect plants from strong winds by windbreaks or bamboo propping.",
+      "Prefers frost-free tropical climate with high relative humidity."
+    ],
+    "farming_practices": [
+      "Plant healthy virus-free tissue culture plantlets at 1.8x1.8 m spacing.",
+      "Supply split fertigation with high potassium during flowering and fruit filling.",
+      "Cover developing bunches with ventilated polypropylene bags to improve skin finish."
+    ],
+    "icon": "fa-solid fa-lemon"
+  },
+  "Coconut": {
+    "season": "Whole Year (Perennial)",
+    "sowing_period": "May \u2013 June (Pre-monsoon) / Sep \u2013 Oct",
+    "sowing_months": [
+      5,
+      6,
+      9,
+      10
+    ],
+    "harvest_period": "Year-round harvesting at 45-day intervals",
+    "temperature": "22 \u2013 35\u00b0C",
+    "temp_desc": "Humid coastal and tropical valleys with high humidity and sunlight.",
+    "rainfall": "1300 \u2013 2200 mm",
+    "soil_type": "Deep sandy loam, coastal alluvium, and red loamy soil",
+    "soil_ph": "5.2 \u2013 8.0",
+    "water_requirement": "High (1300 \u2013 2000 mm)",
+    "growing_duration": "Perennial Palm (Economic life: 60+ Years)",
+    "important_conditions": [
+      "Abundant sunlight and warm humid conditions throughout the year.",
+      "Basin mulching around the trunk conserves critical root moisture.",
+      "Ensure adequate drainage; palms do not tolerate stagnant waterlogged conditions."
+    ],
+    "farming_practices": [
+      "Apply balanced NPK fertilizer + Magnesium Sulfate twice a year (Pre & Post Monsoon).",
+      "Incorporate organic mulch or coir pith in 2m basin around the tree base.",
+      "Install pheromone traps to monitor and control Rhinoceros beetle."
+    ],
+    "icon": "fa-solid fa-tree"
+  },
+  "Arecanut": {
+    "season": "Whole Year",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Arecanut.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "High (1500 - 2500 mm)",
+    "growing_duration": "Perennial",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Arecanut.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Provide proper shade for young seedlings during first 3 years.",
+      "Spray Bordeaux mixture 1% before monsoon to prevent fruit rot (Koleroga).",
+      "Adopt intercropping with black pepper or cocoa for diversified income."
+    ],
+    "icon": "fa-solid fa-tree"
+  },
+  "Barley": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Barley.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Barley.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Barley suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Black pepper": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Black pepper.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Black pepper.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Black pepper suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Cardamom": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Cardamom.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Cardamom.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Cardamom suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Cashewnut": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Cashewnut.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Cashewnut.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Cashewnut suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Castor seed": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Castor seed.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Castor seed.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Castor seed suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Coriander": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Coriander.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Coriander.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Coriander suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Cowpea(Lobia)": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Cowpea(Lobia).",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Cowpea(Lobia).",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Cowpea(Lobia) suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Dry chillies": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Dry chillies.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Dry chillies.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Dry chillies suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Garlic": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Garlic.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Garlic.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Garlic suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Ginger": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Ginger.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Ginger.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Ginger suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Guar seed": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Guar seed.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Guar seed.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Guar seed suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Horse-gram": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Horse-gram.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Horse-gram.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Horse-gram suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Jute": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Jute.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Jute.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Jute suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Khesari": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Khesari.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Khesari.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Khesari suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Linseed": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Linseed.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Linseed.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Linseed suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Masoor": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Masoor.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Masoor.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Masoor suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Mesta": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Mesta.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Mesta.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Mesta suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Moth": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Moth.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Moth.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Moth suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Niger seed": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Niger seed.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Niger seed.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Niger seed suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Oilseeds total": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Oilseeds total.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Oilseeds total.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Oilseeds total suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Other  Rabi pulses": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Other  Rabi pulses.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Other  Rabi pulses.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Other  Rabi pulses suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Other Cereals": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Other Cereals.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Other Cereals.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Other Cereals suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Other Kharif pulses": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Other Kharif pulses.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Other Kharif pulses.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Other Kharif pulses suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Other Summer Pulses": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Other Summer Pulses.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Other Summer Pulses.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Other Summer Pulses suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Peas & beans (Pulses)": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Peas & beans (Pulses).",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Peas & beans (Pulses).",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Peas & beans (Pulses) suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Ragi": {
+    "season": "Kharif (Monsoon)",
+    "sowing_period": "June \u2013 July",
+    "sowing_months": [
+      6,
+      7
+    ],
+    "harvest_period": "October \u2013 November",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Ragi.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Low to Medium (400 - 550 mm)",
+    "growing_duration": "100 - 120 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Ragi.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Transplant 21-day seedlings in rows for higher tillering.",
+      "Incorporate farmyard manure to enhance water retention in lighter soils.",
+      "Harvest when earheads turn distinct brown."
+    ],
+    "icon": "fa-solid fa-wheat-awn"
+  },
+  "Safflower": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Safflower.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Safflower.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Safflower suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Sannhamp": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Sannhamp.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Sannhamp.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Sannhamp suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Small millets": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Small millets.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Small millets.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Small millets suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Sweet potato": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Sweet potato.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Sweet potato.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Sweet potato suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Tapioca": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Tapioca.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Tapioca.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Tapioca suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Tobacco": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Tobacco.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Tobacco.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Tobacco suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "Turmeric": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for Turmeric.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for Turmeric.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of Turmeric suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  },
+  "other oilseeds": {
+    "season": "Whole Year / Seasonal",
+    "sowing_period": "Seasonal Window",
+    "sowing_months": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "harvest_period": "End of Season",
+    "temperature": "18 \u2013 32\u00b0C",
+    "temp_desc": "Mild to warm temperature range provides ideal growth conditions for other oilseeds.",
+    "rainfall": "500 \u2013 900 mm",
+    "soil_type": "Well-drained loamy to sandy loam soil with good fertility",
+    "soil_ph": "6.0 \u2013 7.5",
+    "water_requirement": "Moderate (450 - 750 mm)",
+    "growing_duration": "90 - 130 Days",
+    "important_conditions": [
+      "Soil should be well pulverized and aerated with good organic matter for other oilseeds.",
+      "Ensure balanced basal fertilization and weed-free conditions during early establishment.",
+      "Maintain steady moisture levels without waterlogging during critical reproductive stages."
+    ],
+    "farming_practices": [
+      "Use certified high-yielding seeds of other oilseeds suited to regional conditions.",
+      "Maintain recommended spacing and basal NPK application at sowing.",
+      "Scout field weekly for pest symptoms and ensure weed-free initial growth."
+    ],
+    "icon": "fa-solid fa-seedling"
+  }
+}

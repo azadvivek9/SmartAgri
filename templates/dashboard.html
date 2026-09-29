@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+
+{% block title %}Farm Dashboard{% endblock %}
+{% block page_title %}Dashboard Overview{% endblock %}
+{% block breadcrumb_item %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Error Notification if Weather API is Unavailable -->
+{% if weather_error %}
+<div class="alert alert-warning" id="weatherErrorMessage" style="margin-bottom: 20px;">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>{{ weather_error }}</span>
+  <button class="alert-close" aria-label="Close Alert">&times;</button>
+</div>
+{% endif %}
+
+<!-- Weather Loading Skeleton Banner -->
+<div id="weatherLoadingState" style="display: none; align-items: center; justify-content: center; gap: 10px; background: #edf9ee; border: 1px dashed var(--accent); padding: 12px; border-radius: var(--radius-md); margin-bottom: 20px; color: var(--primary-dark); font-weight: 600; font-size: 0.9rem;">
+  <i class="fa-solid fa-spinner fa-spin" style="color: var(--secondary); font-size: 1.2rem;"></i>
+  <span>Loading real-time weather data...</span>
+</div>
+
+<!-- DASHBOARD HERO BANNER -->
+<section class="dashboard-hero">
+  <div class="hero-left">
+    <h2>Good Morning, {{ user['name'] }} 👋</h2>
+    <p>Here is your agriculture advisory overview for today.</p>
+    <div class="hero-location-tag">
+      <i class="fa-solid fa-location-dot"></i>
+      <span>📍 {{ user['location'] or 'Meerut, Uttar Pradesh, India' }}</span>
+      <span style="opacity: 0.6; margin: 0 4px;">•</span>
+      <span>Farm: {{ user['village'] or 'Hastinapur' }} ({{ user['land_area'] or '4.5 Acres' }})</span>
+    </div>
+  </div>
+
+  <div class="hero-stats-badge">
+    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: 6px;">
+      <button class="btn btn-secondary btn-sm refresh-weather-btn" data-location="{{ user['location'] or 'Meerut, Uttar Pradesh, India' }}" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); color: #ffffff;">
+        <i class="fa-solid fa-arrows-rotate"></i>
+        <span>Refresh Weather</span>
+      </button>
+    </div>
+    <div class="hero-date-badge live-weather-updated">
+      <i class="fa-regular fa-clock" style="margin-right: 4px;"></i>
+      <span>Last updated: {{ last_updated or 'Just now' }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- 4 LARGE SUMMARY CARDS -->
+<section class="stats-grid-4">
+  <!-- Card 1: 🌦️ Weather (Real OpenWeather Data) -->
+  <div class="stat-card weather">
+    <div class="stat-card-header">
+      <span class="stat-label">Real Weather Telemetry</span>
+      <div class="stat-icon-wrapper">
+        {% if weather['icon_url'] and is_live %}
+          <img src="{{ weather['icon_url'] }}" alt="{{ weather['condition'] }}" style="width: 36px; height: 36px;">
+        {% else %}
+          <i class="{{ weather['fa_icon'] or 'fa-solid fa-cloud-sun-rain' }}"></i>
+        {% endif %}
+      </div>
+    </div>
+    <div class="stat-main-value live-weather-temp">
+      {% if weather['temp'] != '--' %}{{ weather['temp'] }}°C{% else %}--{% endif %}
+    </div>
+    <div style="font-weight: 600; font-size: 0.92rem; color: #0284c7; margin-bottom: 4px;" class="live-weather-cond">
+      {{ weather['description'] or weather['condition'] }}
+    </div>
+    <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;" class="live-weather-feels">
+      Feels like {{ weather['feels_like'] }}°C • Pressure: <span class="live-weather-pressure">{{ weather['pressure'] }} hPa</span>
+    </div>
+    <div class="stat-sub-detail">
+      <span><i class="fa-solid fa-droplet" style="color: #0284c7;"></i> Hum: <span class="live-weather-humidity">{{ weather['humidity'] }}%</span></span>
+      <span>•</span>
+      <span><i class="fa-solid fa-wind" style="color: #0284c7;"></i> Wind: <span class="live-weather-wind">{{ weather['wind_speed'] }} m/s</span></span>
+      {% if weather['rain_prob_available'] %}
+      <span>•</span>
+      <span><i class="fa-solid fa-cloud-rain" style="color: #0284c7;"></i> Rain: <span class="live-weather-rain">{{ weather['rain_probability'] }}%</span></span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Card 2: 🌱 Crop -->
+  <div class="stat-card crop">
+    <div class="stat-card-header">
+      <span class="stat-label">Current Crop Stage</span>
+      <div class="stat-icon-wrapper">
+        <i class="fa-solid fa-wheat-awn"></i>
+      </div>
+    </div>
+    <div class="stat-main-value" style="font-size: 1.35rem;">{{ crop['current_crop'] }}</div>
+    <div style="font-weight: 600; font-size: 0.88rem; color: #16a34a; margin-bottom: 6px;">
+      {{ crop['growth_stage'] }}
+    </div>
+    <div class="stat-sub-detail">
+      <span class="badge badge-success" style="font-size: 0.72rem;">
+        <i class="fa-solid fa-circle-check"></i> {{ crop['crop_health'] }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Card 3: 🧪 Soil -->
+  <div class="stat-card soil">
+    <div class="stat-card-header">
+      <span class="stat-label">Soil Health & pH</span>
+      <div class="stat-icon-wrapper">
+        <i class="fa-solid fa-flask-vial"></i>
+      </div>
+    </div>
+    <div class="stat-main-value">pH {{ soil['ph'] }}</div>
+    <div style="font-weight: 600; font-size: 0.88rem; color: #d97706; margin-bottom: 6px;">
+      Status: {{ soil['health_score'] }}
+    </div>
+    <div class="stat-sub-detail">
+      <span><i class="fa-solid fa-chart-simple" style="color: #d97706;"></i> {{ soil['npk_summary'] }}</span>
+    </div>
+  </div>
+
+  <!-- Card 4: 💰 Market -->
+  <div class="stat-card market">
+    <div class="stat-card-header">
+      <span class="stat-label">Market / Mandi Price</span>
+      <div class="stat-icon-wrapper">
+        <i class="fa-solid fa-coins"></i>
+      </div>
+    </div>
+    <div class="stat-main-value" style="font-size: 1.45rem;">{{ market['modal_price'] }}</div>
+    <div style="font-weight: 600; font-size: 0.88rem; color: #16a34a; margin-bottom: 6px;">
+      {{ market['crop'] }} (Meerut Mandi)
+    </div>
+    <div class="stat-sub-detail">
+      <span style="color: #16a34a; font-weight: 700;">
+        <i class="fa-solid fa-arrow-trend-up"></i> {{ market['trend'] }} this week
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- TODAY'S ADVISORY SECTION (Rule-based from Real Weather) -->
+<section style="margin-bottom: 32px;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+    <div>
+      <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-bullhorn" style="color: var(--secondary);"></i>
+        <span>Today's Agriculture Advisories</span>
+      </h2>
+      <p style="font-size: 0.82rem; color: var(--text-muted);">Real-time action rules derived from live atmospheric telemetry</p>
+    </div>
+    <span class="badge badge-success">4 Active Bulletins</span>
+  </div>
+
+  <div class="advisories-grid">
+    {% for adv in advisories %}
+      <div class="advisory-card">
+        <div class="advisory-icon-box" style="background-color: {{ adv.bg }}; color: {{ adv.color }};">
+          <i class="{{ adv.icon }}"></i>
+        </div>
+        <div class="advisory-content">
+          <div class="advisory-top">
+            <h3>{{ adv.title }}</h3>
+            <span class="badge {{ adv.badge_cls }}">{{ adv.badge }}</span>
+          </div>
+          <p class="advisory-msg">{{ adv.message }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- WEATHER CHART & QUICK ACTIONS (2 Columns) -->
+<section class="grid-2" style="margin-bottom: 32px;">
+  <!-- Left: Real Forecast Weather Chart -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-box">
+        <i class="fa-solid fa-chart-line" style="color: var(--primary);"></i>
+        <div>
+          <h3 class="card-title">Real Weather & Precipitation Forecast</h3>
+          <p class="card-subtitle">Temperature & rain probability curves for {{ user['location'] or 'Meerut, UP' }}</p>
+        </div>
+      </div>
+      <a href="{{ url_for('weather.index') }}" class="btn btn-secondary btn-sm">Full Advisory &rarr;</a>
+    </div>
+    <div style="height: 280px; position: relative;">
+      <canvas id="dashboardWeatherChartCanvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Right: Quick Actions Grid -->
+  <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+    <div>
+      <div class="card-header">
+        <div class="card-title-box">
+          <i class="fa-solid fa-bolt-lightning" style="color: var(--secondary);"></i>
+          <div>
+            <h3 class="card-title">Quick Farming Actions</h3>
+            <p class="card-subtitle">Fast access to key advisory calculators & scanners</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-actions-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <a href="{{ url_for('weather.index') }}" class="quick-action-tile">
+          <div class="action-icon"><i class="fa-solid fa-cloud-sun"></i></div>
+          <span>Check Weather</span>
+        </a>
+
+        <a href="{{ url_for('crop.index') }}" class="quick-action-tile">
+          <div class="action-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+          <span>Recommend Crop</span>
+        </a>
+
+        <a href="{{ url_for('soil.index') }}" class="quick-action-tile">
+          <div class="action-icon"><i class="fa-solid fa-vial"></i></div>
+          <span>Analyze Soil</span>
+        </a>
+
+        <a href="{{ url_for('mandi.index') }}" class="quick-action-tile">
+          <div class="action-icon"><i class="fa-solid fa-coins"></i></div>
+          <span>Check Mandi Price</span>
+        </a>
+      </div>
+    </div>
+
+    <div style="margin-top: 14px;">
+      <a href="{{ url_for('disease.index') }}" class="btn btn-primary btn-block" style="padding: 13px;">
+        <i class="fa-solid fa-camera"></i>
+        <span>Scan Leaf for Crop Disease</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- RECENT ACTIVITY LOG -->
+{% if recent_recs %}
+<section class="card">
+  <div class="card-header">
+    <div class="card-title-box">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <div>
+        <h3 class="card-title">Recent Crop Recommendations</h3>
+        <p class="card-subtitle">Saved ML recommendations for your land holding</p>
+      </div>
+    </div>
+    <a href="{{ url_for('crop.index') }}" class="btn btn-secondary btn-sm">New Recommendation</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Recommended Crop</th>
+          <th>Suitability</th>
+          <th>Confidence</th>
+          <th>Season</th>
+          <th>Soil N-P-K</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in recent_recs %}
+        <tr>
+          <td><strong style="color: var(--primary);"><i class="fa-solid fa-leaf" style="color: var(--secondary); margin-right: 6px;"></i>{{ r['recommended_crop'] }}</strong></td>
+          <td><span class="badge badge-success">{{ r['suitability'] }}</span></td>
+          <td><strong>{{ r['confidence'] }}%</strong></td>
+          <td>{{ r['season'] }}</td>
+          <td>N:{{ r['nitrogen']|round|int }} P:{{ r['phosphorus']|round|int }} K:{{ r['potassium']|round|int }}</td>
+          <td>{{ r['created_at'][:10] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const chartData = {{ weather_chart | tojson }};
+    if (window.renderDashboardWeatherChart) {
+      window.renderDashboardWeatherChart('dashboardWeatherChartCanvas', chartData);
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,1896 @@
+{% extends "base.html" %}
+
+{% block title %}Crop Recommendation{% endblock %}
+{% block page_title %}Crop Recommendation{% endblock %}
+{% block breadcrumb_item %}Crop Recommendation{% endblock %}
+
+{% block content %}
+<style>
+  /* Target Suitability Explorer Range Slider */
+  .target-confidence-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(to right, #16a34a 0%, #16a34a var(--target-pct, 50%), #e2e8f0 var(--target-pct, 50%), #e2e8f0 100%);
+    outline: none;
+    cursor: grab;
+    transition: background 0.15s ease;
+    margin: 0;
+  }
+  .target-confidence-slider:active {
+    cursor: grabbing;
+  }
+  .target-confidence-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #15803d;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .target-confidence-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 3px 9px rgba(22, 163, 74, 0.5);
+  }
+  .target-confidence-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #15803d;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    cursor: grab;
+    transition: transform 0.15s ease;
+  }
+
+  /* Highlight for auto-adjusted fields */
+  .field-highlight-adjusted {
+    border-color: #22c55e !important;
+    background-color: #f0fdf4 !important;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2) !important;
+    transition: all 0.35s ease;
+  }
+
+  /* History Table Scroll & Sticky Header */
+  .history-table-container {
+    max-height: 460px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    position: relative;
+  }
+  .history-table-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .history-table-container::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 4px;
+  }
+  .history-table-container::-webkit-scrollbar-thumb {
+    background: #86efac;
+    border-radius: 4px;
+  }
+  .history-table-container::-webkit-scrollbar-thumb:hover {
+    background: #22c55e;
+  }
+  .sticky-table-head th {
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    z-index: 10;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  /* Filter Controls */
+  .filter-bar {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr auto;
+    gap: 10px;
+    background: #f8fafc;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    margin-bottom: 14px;
+    align-items: center;
+  }
+  /* Agro-Climatic Planning Guide (Dark Header + Light Body) */
+  .planning-guide-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .planning-header-row {
+    background: linear-gradient(135deg, #0d2818 0%, #14532d 100%);
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .planning-toggle-btn {
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 7px 18px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+  }
+  .planning-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    transform: translateY(-1px);
+  }
+  /* Custom Searchable Crop Select (Matching UI Screenshot) */
+  .crop-select-control-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 18px;
+  }
+  .crop-select-trigger {
+    width: 100%;
+    min-height: 48px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    user-select: none;
+  }
+  .crop-select-trigger:hover {
+    border-color: #94a3b8;
+    background: #f8fafc;
+  }
+  .crop-select-trigger.active,
+  .crop-select-trigger:focus-visible {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.15);
+    background: #ffffff;
+    outline: none;
+  }
+  .crop-select-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.06);
+    z-index: 1000;
+    padding: 12px;
+    display: none;
+  }
+  .crop-select-dropdown.open {
+    display: block;
+    animation: cropDropdownFade 0.18s ease forwards;
+  }
+  @keyframes cropDropdownFade {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .crop-inner-search-box {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s ease;
+  }
+  .crop-inner-search-box:focus-within {
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  .crop-inner-search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 0.92rem;
+    color: #0f172a;
+    font-weight: 500;
+    font-family: inherit;
+  }
+  .crop-options-scrollable {
+    max-height: 290px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .crop-options-scrollable::-webkit-scrollbar {
+    width: 6px;
+  }
+  .crop-options-scrollable::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+  }
+  .crop-options-scrollable::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 4px;
+  }
+  .crop-options-scrollable::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+  .crop-option-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    margin-bottom: 2px;
+  }
+  .crop-option-item:hover,
+  .crop-option-item:focus,
+  .crop-option-item.highlighted {
+    background: #f1f5f9;
+    outline: none;
+  }
+  .crop-option-item.selected {
+    background: #eff6ff;
+  }
+  .crop-option-item.selected .crop-option-title {
+    color: #1d4ed8;
+  }
+  .crop-option-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .crop-option-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .crop-option-subtitle {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 500;
+  }
+  .crop-option-badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .planning-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 992px) {
+    .planning-metric-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 576px) {
+    .planning-metric-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .planning-metric-box {
+    background: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+  .planning-metric-box:hover {
+    background: #f0fdf4;
+    border-color: #86efac;
+    transform: translateY(-2px);
+  }
+  .planning-metric-label {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .planning-metric-val {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 2px;
+  }
+  .planning-metric-desc {
+    font-size: 0.74rem;
+    color: #64748b;
+    line-height: 1.35;
+  }
+  .planning-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 768px) {
+    .planning-details-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .planning-detail-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  }
+</style>
+
+<!-- 1. AGRO-CLIMATIC PLANNING GUIDE (DARK HEADER + LIGHT FULL BODY) -->
+<div class="planning-guide-card">
+  <!-- Dark Themed Header with Toggle Button -->
+  <div class="planning-header-row">
+    <div>
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+        🌱 Agro-Climatic Planning Guide
+      </h2>
+      <p style="margin: 4px 0 0 0; color: #bbf7d0; font-size: 0.86rem; font-weight: 400;">
+        Plan your crop before planting — discover recommended seasons, sowing windows & climate requirements.
+      </p>
+    </div>
+    <div>
+      <button type="button" id="togglePlanningGuideBtn" class="planning-toggle-btn" aria-expanded="false" aria-controls="planningGuideBody">
+        <span id="planningToggleBtnText">Show Full Section</span>
+        <i id="planningToggleIcon" class="fa-solid fa-chevron-down" style="font-size: 0.8rem; transition: transform 0.25s ease;"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Full Section (Clean Light Theme, Minimized by Default) -->
+  <div id="planningGuideBody" style="display: none; padding: 22px 24px 24px 24px; background: #ffffff; border-top: 1px solid var(--border-light);">
+    <!-- Single User Input: Custom Searchable Crop Selector (Matching UI Screenshot) -->
+    <div class="crop-select-control-wrapper">
+      <label class="form-label" style="font-size: 0.76rem; font-weight: 800; color: #475569; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px; display: block;">
+        SELECT CROP
+      </label>
+
+      <!-- Trigger Box -->
+      <div id="cropCustomTrigger" class="crop-select-trigger" tabindex="0" role="combobox" aria-expanded="false" aria-haspopup="listbox">
+        <div style="display: flex; align-items: center; gap: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          <i class="fa-solid fa-magnifying-glass" style="color: #2563eb; font-size: 0.95rem;"></i>
+          <span id="cropCustomTriggerText" style="font-weight: 700; font-size: 0.93rem; color: #0f172a;">
+            {{ initial_crop_plan.crop_name if initial_crop_plan else 'Search & Select Crop by Name or Season...' }}
+          </span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span id="advisoryLoadingSpinner" style="display: none; color: #2563eb; font-size: 0.9rem;">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+          </span>
+          <i id="cropCustomChevron" class="fa-solid fa-chevron-down" style="color: #2563eb; font-size: 0.82rem; transition: transform 0.2s ease;"></i>
+        </div>
+      </div>
+
+      <!-- Hidden native inputs for form compatibility / fallback -->
+      <input type="hidden" id="advisoryCropSearch" value="{{ initial_crop_plan.crop_name if initial_crop_plan else 'Rice' }}">
+      <input type="hidden" id="advisoryCropSelect" value="{{ initial_crop_plan.crop_name if initial_crop_plan else 'Rice' }}">
+
+      <!-- Floating Dropdown Panel with Search & Filterable Items -->
+      <div id="cropCustomDropdown" class="crop-select-dropdown" role="listbox">
+        <!-- Inner Search Input Bar -->
+        <div class="crop-inner-search-box">
+          <i class="fa-solid fa-magnifying-glass" style="color: #2563eb; font-size: 0.9rem;"></i>
+          <input type="text" id="cropInnerSearchInput" placeholder="Search Crop Name, Season or Duration..." autocomplete="off" spellcheck="false">
+          <button type="button" id="cropInnerSearchClear" style="display: none; background: none; border: none; color: #94a3b8; cursor: pointer; padding: 2px 6px; font-size: 0.85rem;" title="Clear search">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Scrollable Options List -->
+        <div id="cropCustomOptionsList" class="crop-options-scrollable">
+          {% for crop_name in planning_crops %}
+            {% set meta = planning_metadata.get(crop_name, {}) if planning_metadata else {} %}
+            <div class="crop-option-item {% if initial_crop_plan and initial_crop_plan.crop_name == crop_name %}selected{% endif %}" 
+                 data-crop="{{ crop_name }}" 
+                 data-search="{{ crop_name }} {{ meta.get('season', '') }} {{ meta.get('growing_duration', '') }} {{ meta.get('water_requirement', '') }}"
+                 tabindex="0"
+                 role="option">
+              <div class="crop-option-info">
+                <div class="crop-option-title">{{ crop_name }}</div>
+                <div class="crop-option-subtitle">
+                  {{ meta.get('season', 'Seasonal') }} | {{ meta.get('water_requirement', 'Moderate Water') }} | {{ meta.get('growing_duration', '90-120 Days') }}
+                </div>
+              </div>
+              <div class="crop-option-badge">
+                {% if 'Kharif' in meta.get('season', '') %}KHARIF
+                {% elif 'Rabi' in meta.get('season', '') %}RABI
+                {% elif 'Whole Year' in meta.get('season', '') %}YEAR-ROUND
+                {% elif 'Summer' in meta.get('season', '') or 'Zaid' in meta.get('season', '') %}SUMMER
+                {% elif 'Autumn' in meta.get('season', '') %}AUTUMN
+                {% elif 'Winter' in meta.get('season', '') %}WINTER
+                {% else %}CROP
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+          <div id="cropNoResultsMsg" style="display: none; text-align: center; padding: 20px 10px; color: #64748b; font-size: 0.88rem;">
+            <i class="fa-solid fa-wheat-awn-circle-exclamation" style="font-size: 1.3rem; margin-bottom: 6px; display: block; color: #94a3b8;"></i>
+            No crops match your search.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State (shown when no crop is selected) -->
+    <div id="advisoryEmptyState" style="display: none; text-align: center; padding: 32px 16px; background: #f8fafc; border: 1px dashed var(--border-light); border-radius: var(--radius-md); margin-bottom: 8px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: #dcfce7; color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 10px;">
+        <i class="fa-solid fa-seedling"></i>
+      </div>
+      <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-heading); margin: 0 0 6px 0;">🌱 Select a crop to begin</h4>
+      <p style="margin: 0; color: var(--text-muted); font-size: 0.88rem; max-width: 520px; margin: 0 auto;">
+        Choose a crop to see the recommended growing season, planting window, climate requirements and farming conditions for your selected location.
+      </p>
+    </div>
+
+    <!-- Active Results Container -->
+    <div id="advisoryResultContainer">
+      <!-- Timing & Sowing Status Banner -->
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-circle-check" style="color: var(--primary); font-size: 1.05rem;"></i>
+          <span id="planStatusMessage" style="font-size: 0.92rem; color: #166534; font-weight: 600;">
+            {{ initial_crop_plan.status_message if initial_crop_plan else 'Checking seasonal suitability...' }}
+          </span>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #86efac; padding: 5px 12px; border-radius: var(--radius-md); font-size: 0.84rem; color: #15803d; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fa-regular fa-clock" style="color: var(--primary);"></i> Sowing Cycle: <span id="planNextWindow" style="color: var(--text-heading); font-weight: 800;">{{ initial_crop_plan.next_window if initial_crop_plan else 'Seasonal' }}</span>
+        </div>
+      </div>
+
+      <!-- Core Agronomic Parameters Grid (8 Key Cards) -->
+      <div class="planning-metric-grid">
+      <!-- 1. Best Season -->
+      <div class="planning-metric-box">
+        <div class="planning-metric-label">
+          <i class="fa-solid fa-cloud-sun" style="color: #eab308;"></i> Best Growing Season
+        </div>
+        <div class="planning-metric-val" id="planSeason">{{ initial_crop_plan.season if initial_crop_plan else 'Kharif' }}</div>
+        <div class="planning-metric-desc">Primary cropping season</div>
+      </div>
+
+      <!-- 2. Planting Period -->
+      <div class="planning-metric-box">
+        <div class="planning-metric-label">
+          <i class="fa-regular fa-calendar-days" style="color: #0284c7;"></i> Sowing / Planting Period
+        </div>
+        <div class="planning-metric-val" id="planSowingPeriod">{{ initial_crop_plan.sowing_period if initial_crop_plan else 'June – July' }}</div>
+        <div class="planning-metric-desc">Recommended seeding window</div>
+      </div>
+
+      <!-- 3. Temperature -->
+      <div class="planning-metric-box">
+        <div class="planning-metric-label">
+          <i class="fa-solid fa-temperature-half" style="color: #ea580c;"></i> Suitable Temperature
+        </div>
+        <div class="planning-metric-val" id="planTemperature">{{ initial_crop_plan.temperature if initial_crop_plan else '20 – 35°C' }}</div>
+        <div class="planning-metric-desc" id="planTempDesc">{{ initial_crop_plan.temp_desc if initial_crop_plan else 'Best growth in mild to warm temperatures.' }}</div>
+      </div>
+
+      <!-- 4. Rainfall -->
+      <div class="planning-metric-box">
+        <div class="planning-metric-label">
+          <i class="fa-solid fa-cloud-rain" style="color: #2563eb;"></i> Rainfall Requirement
+        </div>
+        <div class="planning-metric-val" id="planRainfall">{{ initial_crop_plan.rainfall if initial_crop_plan else '1000 – 1800 mm' }}</div>
+        <div class="planning-metric-desc" id="planRainfallDesc">{{ initial_crop_plan.rainfall_desc if initial_crop_plan else 'Adequate rainfall or irrigation needed.' }}</div>
+      </div>
+
+      <!-- 5. Soil Type -->
+      <div class="planning-metric-box">
+        <div class="planning-metric-label">
+          <i class="fa-solid fa-mountain" style="color: #65a30d;"></i> Soil Requirements
+        </div>
+        <div class="planning-metric-val" id="planSoilType" style="font-size: 0.95rem;">{{ initial_crop_plan.soil_type if initial_crop_plan else 'Clayey loam / Alluvial' }}</div>
+        <div class="planning-metric-desc">Optimal soil texture & structure</div>
+      </div>
+
+      <!-- 6. Soil pH -->
+      <div class="planning-metric-box">
+        <div class="planning-metric-label">
+          <i class="fa-solid fa-flask" style="color: #9333ea;"></i> Suitable Soil pH
+        </div>
+        <div class="planning-metric-val" id="planSoilPh">pH {{ initial_crop_plan.soil_ph if initial_crop_plan else '5.5 – 7.2' }}</div>
+        <div class="planning-metric-desc" id="planSoilPhDesc">{{ initial_crop_plan.soil_ph_desc if initial_crop_plan else 'Soil within standard pH range for nutrient availability.' }}</div>
+      </div>
+
+      <!-- 7. Water Requirement -->
+      <div class="planning-metric-box">
+        <div class="planning-metric-label">
+          <i class="fa-solid fa-droplet" style="color: #0284c7;"></i> Water Requirement
+        </div>
+        <div class="planning-metric-val" id="planWaterReq">{{ initial_crop_plan.water_requirement if initial_crop_plan else 'High (1200–1500 mm)' }}</div>
+        <div class="planning-metric-desc" id="planWaterDesc">{{ initial_crop_plan.water_desc if initial_crop_plan else 'Crop water demand' }}</div>
+      </div>
+
+      <!-- 8. Duration & Harvest -->
+      <div class="planning-metric-box">
+        <div class="planning-metric-label">
+          <i class="fa-solid fa-hourglass-half" style="color: #db2777;"></i> Duration & Harvest
+        </div>
+        <div class="planning-metric-val" style="font-size: 0.95rem;">
+          <span id="planDuration">{{ initial_crop_plan.growing_duration if initial_crop_plan else '120 – 150 Days' }}</span>
+        </div>
+        <div class="planning-metric-desc">
+          Harvest: <strong id="planHarvestPeriod" style="color: var(--text-heading);">{{ initial_crop_plan.harvest_period if initial_crop_plan else 'Oct – Nov' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Important Conditions & Farming Practices -->
+    <div class="planning-details-grid">
+      <!-- Important Conditions -->
+      <div class="planning-detail-card">
+        <h4 style="color: var(--text-heading); font-size: 0.92rem; font-weight: 700; margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-lightbulb" style="color: #eab308;"></i> Important Farming Conditions
+        </h4>
+        <ul id="planImportantConditions" style="margin: 0; padding-left: 18px; color: var(--text-main); font-size: 0.88rem; line-height: 1.55;">
+          {% if initial_crop_plan and initial_crop_plan.important_conditions %}
+            {% for item in initial_crop_plan.important_conditions %}
+              <li style="margin-bottom: 6px;">{{ item }}</li>
+            {% endfor %}
+          {% else %}
+            <li style="margin-bottom: 6px;">Ensure adequate soil moisture during vegetative and grain formation stages.</li>
+            <li style="margin-bottom: 6px;">Ensure proper field drainage to prevent water stagnation.</li>
+            <li style="margin-bottom: 6px;">Maintain recommended crop spacing for optimal sunlight penetration.</li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Recommended Practices -->
+      <div class="planning-detail-card">
+        <h4 style="color: var(--text-heading); font-size: 0.92rem; font-weight: 700; margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-tractor" style="color: var(--primary);"></i> Recommended Farming Practices
+        </h4>
+        <ul id="planFarmingPractices" style="margin: 0; padding-left: 18px; color: var(--text-main); font-size: 0.88rem; line-height: 1.55;">
+          {% if initial_crop_plan and initial_crop_plan.farming_practices %}
+            {% for item in initial_crop_plan.farming_practices %}
+              <li style="margin-bottom: 6px;">{{ item }}</li>
+            {% endfor %}
+          {% else %}
+            <li style="margin-bottom: 6px;">Use certified disease-resistant seeds suitable for your agro-climatic zone.</li>
+            <li style="margin-bottom: 6px;">Apply basal fertilizers as per soil test recommendations.</li>
+            <li style="margin-bottom: 6px;">Adopt integrated pest management (IPM) at critical growth stages.</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- /#planningGuideBody -->
+</div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- EXISTING CROP RECOMMENDATION WORKFLOW (BELOW CROP PLANNING ADVISORY)      -->
+<!-- ========================================================================= -->
+<div class="grid-2" style="align-items: start; margin-top: 4px;">
+  <!-- LEFT: Precision Soil & Climate Parameters Input Form -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-box">
+        <i class="fa-solid fa-sliders" style="color: var(--primary);"></i>
+        <div>
+          <h3 class="card-title">Soil & Climate Parameters</h3>
+          <p class="card-subtitle">Input your farm metrics or laboratory soil test report</p>
+        </div>
+      </div>
+    </div>
+
+    <form id="cropPredictionForm" method="POST" action="{{ url_for('crop.predict_api') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <!-- Regional & Seasonal Parameters -->
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="state">
+            <i class="fa-solid fa-location-dot" style="color: var(--primary); margin-right: 4px;"></i> State / Region
+          </label>
+          <select id="state" name="state" class="form-control" required>
+            {% for st in allowed_states %}
+              <option value="{{ st }}" {% if st.lower() in form_data['state'].lower() %}selected{% endif %}>{{ st }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="season">
+            <i class="fa-solid fa-calendar-days" style="color: var(--primary); margin-right: 4px;"></i> Cropping Season
+          </label>
+          <select id="season" name="season" class="form-control" required>
+            {% for sn in allowed_seasons %}
+              <option value="{{ sn }}" {% if sn.lower() in form_data['season'].lower() %}selected{% endif %}>
+                {{ sn }} {% if sn == 'Kharif' %}(Monsoon){% elif sn == 'Rabi' %}(Winter){% elif sn == 'Summer' %}(Zaid){% endif %}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <!-- Farm Area & Annual Rainfall Input Fields -->
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="area">
+            <i class="fa-solid fa-chart-area" style="color: var(--primary); margin-right: 4px;"></i> Farm Area (Acres/Ha)
+          </label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-vector-square"></i>
+            <input type="number" step="0.1" min="0.1" max="50000" id="area" name="area" class="form-control" value="{{ form_data['area'] }}" placeholder="e.g. 5.0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rainfall">
+            <i class="fa-solid fa-cloud-showers-heavy" style="color: var(--primary); margin-right: 4px;"></i> Annual Rainfall (mm)
+          </label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-cloud-rain"></i>
+            <input type="number" step="1" min="50" max="7000" id="rainfall" name="rainfall" class="form-control" value="{{ form_data['rainfall']|round|int }}" placeholder="e.g. 1150" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fertilizer & Pesticide Usage Input Fields -->
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="fertilizer">
+            <i class="fa-solid fa-seedling" style="color: var(--primary); margin-right: 4px;"></i> Fertilizer Usage (kg)
+          </label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-sack-dollar"></i>
+            <input type="number" step="1" min="0" max="10000000" id="fertilizer" name="fertilizer" class="form-control" value="{{ form_data['fertilizer']|round|int }}" placeholder="e.g. 650" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pesticide">
+            <i class="fa-solid fa-shield-halved" style="color: var(--primary); margin-right: 4px;"></i> Pesticide Usage (kg)
+          </label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-bottle-droplet"></i>
+            <input type="number" step="0.1" min="0" max="100000" id="pesticide" name="pesticide" class="form-control" value="{{ form_data['pesticide'] }}" placeholder="e.g. 12.0" required>
+          </div>
+        </div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid var(--border-light); margin: 12px 0 16px;">
+
+      <!-- Soil Chemical Nutrients: N, P, K, pH Inputs -->
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="nitrogen">Nitrogen (N) (kg/ha)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-flask"></i>
+            <input type="number" step="1" min="0" max="250" id="nitrogen" name="nitrogen" class="form-control" value="{{ form_data['nitrogen'] }}" placeholder="e.g. 85" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="phosphorus">Phosphorus (P) (kg/ha)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-flask"></i>
+            <input type="number" step="1" min="0" max="200" id="phosphorus" name="phosphorus" class="form-control" value="{{ form_data['phosphorus'] }}" placeholder="e.g. 42" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="potassium">Potassium (K) (kg/ha)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-flask"></i>
+            <input type="number" step="1" min="0" max="300" id="potassium" name="potassium" class="form-control" value="{{ form_data['potassium'] }}" placeholder="e.g. 45" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ph">Soil Reaction (pH)</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-vial"></i>
+            <input type="number" step="0.1" min="3.5" max="10.0" id="ph" name="ph" class="form-control" value="{{ form_data['ph'] }}" placeholder="e.g. 6.8" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 10px; margin-top: 14px;">
+        <button type="submit" id="predictBtn" class="btn btn-primary btn-block btn-lg" style="flex: 1;">
+          <i class="fa-solid fa-seedling" id="predictBtnIcon"></i>
+          <span id="predictBtnText">🌱 Get Crop Recommendation</span>
+        </button>
+      </div>
+
+      <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 12px; color: var(--primary-dark); font-weight: 600; font-size: 0.88rem;">
+        <i class="fa-solid fa-circle-notch fa-spin" style="margin-right: 8px; color: var(--secondary);"></i>
+        <span>Analyzing soil and environmental conditions...</span>
+      </div>
+    </form>
+
+    <!-- Exploration Explanation Card (Shown when target suitability is dragged) -->
+    <div id="explorationBox" style="display: none; margin-top: 16px; padding: 14px 16px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: var(--radius-md);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+        <h4 style="font-size: 0.90rem; font-weight: 700; color: #166534; display: flex; align-items: center; gap: 6px; margin: 0;">
+          <i class="fa-solid fa-lightbulb" style="color: #eab308;"></i>
+          <span>Suitability Improvement Conditions</span>
+        </h4>
+        <button type="button" id="resetExplorerBtn" class="btn btn-outline btn-sm" style="padding: 2px 8px; font-size: 0.75rem; height: auto;">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+      </div>
+      <p id="explorationMsg" style="font-size: 0.84rem; color: #1e293b; margin-bottom: 8px; line-height: 1.4;"></p>
+      <div id="explorationChangesList" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;"></div>
+      <button type="button" id="applyRecalculateBtn" class="btn btn-primary btn-sm" style="width: 100%; font-weight: 700;">
+        <i class="fa-solid fa-calculator"></i> Apply & Recalculate Recommendation
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT: Recommendation Result & Alternative Crops -->
+  <div id="resultsContainer">
+    {% if result %}
+      <!-- Primary Recommended Crop Card with Reverse Exploration -->
+      <div id="primaryMatchCard" class="card" style="border: 2px solid var(--accent); background: linear-gradient(180deg, #ffffff 0%, #f7fcf8 100%); margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+              <span class="badge badge-success" style="font-size: 0.78rem;">
+                <i class="fa-solid fa-trophy"></i> Primary Match
+              </span>
+              <span style="font-size: 0.74rem; font-weight: 700; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 2px 8px; border-radius: 999px;">
+                <i class="fa-solid fa-arrows-rotate"></i> Reverse Target Planning
+              </span>
+            </div>
+
+            <!-- Crop Title & Quick Switch Dropdown -->
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 4px;">
+              <div class="result-crop-name" style="margin: 0;">
+                <i id="primaryCropIcon" class="{{ result['icon'] }}" style="color: var(--secondary);"></i>
+                <span id="primaryCropName">{{ result['recommended_crop'] }}</span>
+              </div>
+              <div>
+                <select id="targetCropSelector" class="form-control" style="font-size: 0.82rem; font-weight: 700; padding: 3px 26px 3px 10px; height: 32px; border-radius: 8px; border: 1.5px solid #86efac; background-color: #f0fdf4; color: #166534; cursor: pointer;" title="Select any crop to reverse-calculate required field conditions">
+                  {% for crop_opt in planning_crops %}
+                    <option value="{{ crop_opt }}" {% if result['recommended_crop'] == crop_opt %}selected{% endif %}>
+                      🔁 Switch to: {{ crop_opt }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 6px;">
+              Target Season: <strong id="primarySeason">{{ result['suitable_season'] }}</strong>
+            </div>
+          </div>
+
+          <div style="text-align: right;">
+            <div id="primaryConfidence" style="font-size: 1.8rem; font-weight: 800; color: #16a34a;">
+              {{ result['confidence'] }}%
+            </div>
+            <span id="primarySuitabilityBadge" class="badge badge-success">Suitability: {{ result['suitability'] }}</span>
+          </div>
+        </div>
+
+        <!-- Interactive Target Suitability Explorer Bar -->
+        <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px 14px; border-radius: var(--radius-md); margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-arrows-left-right" style="color: var(--secondary);"></i>
+              <span>Target Suitability Explorer</span>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 800; color: #16a34a;" id="targetDisplayLabel">
+              Target: <span id="targetSuitabilityVal">{{ result['confidence']|round|int }}</span>%
+            </div>
+          </div>
+
+          <input type="range" 
+                 id="targetConfidenceSlider" 
+                 class="target-confidence-slider" 
+                 min="20" 
+                 max="95" 
+                 step="1" 
+                 value="{{ result['confidence']|round|int }}" 
+                 title="Drag to explore what field conditions would yield this suitability">
+
+          <div style="display: flex; justify-content: space-between; font-size: 0.70rem; color: var(--text-muted); margin-top: 4px;">
+            <span>20% (Moderate)</span>
+            <span style="color: var(--primary); font-weight: 600;">◄ Drag bar to explore conditions ►</span>
+            <span>95% (Optimal)</span>
+          </div>
+        </div>
+
+        <!-- Why Suitable Description -->
+        <div style="background: #eef8f2; padding: 14px 18px; border-radius: var(--radius-md); border-left: 4px solid var(--secondary); margin-bottom: 20px;">
+          <h4 style="font-size: 0.92rem; color: var(--primary-dark); font-weight: 700; margin-bottom: 4px;">
+            <i class="fa-solid fa-circle-info" style="color: var(--secondary); margin-right: 4px;"></i> Agronomic Rationale:
+          </h4>
+          <p id="primaryRationale" style="font-size: 0.88rem; color: var(--text-main); line-height: 1.5;">
+            {{ result['why_suitable'] }}
+          </p>
+        </div>
+
+        <!-- Key Cultivation Metrics -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 22px;">
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px 14px; border-radius: var(--radius-md);">
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">
+              <i class="fa-regular fa-clock" style="color: var(--secondary);"></i> Growing Period
+            </div>
+            <div id="primaryGrowingPeriod" style="font-size: 1.05rem; font-weight: 700; color: var(--text-heading); margin-top: 2px;">
+              {{ result['growing_period'] }}
+            </div>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px 14px; border-radius: var(--radius-md);">
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">
+              <i class="fa-solid fa-droplet" style="color: #0284c7;"></i> Water Requirement
+            </div>
+            <div id="primaryWater" style="font-size: 1.05rem; font-weight: 700; color: var(--text-heading); margin-top: 2px;">
+              {{ result['water_requirement'] }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Farming Tips -->
+        <div>
+          <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-heading); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-lightbulb" style="color: #eab308;"></i>
+            <span>Recommended Best Farming Practices</span>
+          </h4>
+          <ul id="primaryFarmingTips" style="padding-left: 20px; font-size: 0.86rem; color: var(--text-main); display: flex; flex-direction: column; gap: 8px;">
+            {% for tip in result['farming_tips'] %}
+              <li>{{ tip }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Alternative Crops Card -->
+      <div id="alternativeCropsCard" class="card">
+        <div class="card-header">
+          <div class="card-title-box">
+            <i class="fa-solid fa-shuffle" style="color: var(--primary);"></i>
+            <div>
+              <h3 class="card-title">Alternative Suitable Crops</h3>
+              <p class="card-subtitle">Viable crop rotation and intercropping choices</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="alternativesList" style="display: flex; flex-direction: column; gap: 14px;">
+          {% for alt in result['alternatives'] %}
+            <div class="alt-crop-item" style="display: flex; align-items: center; justify-content: space-between; padding: 14px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: #ffffff; transition: background var(--trans-fast);">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 42px; height: 42px; border-radius: var(--radius-md); background: #f0fdf4; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                  <i class="{{ alt['icon'] }}"></i>
+                </div>
+                <div>
+                  <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-heading);">{{ alt['name'] }}</h4>
+                  <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; gap: 10px; margin-top: 2px;">
+                    <span><i class="fa-regular fa-clock"></i> {{ alt['duration'] }}</span>
+                    <span>•</span>
+                    <span><i class="fa-solid fa-droplet" style="color: #0284c7;"></i> {{ alt['water'] }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="text-align: right;">
+                <div style="font-size: 1.15rem; font-weight: 800; color: var(--primary);">{{ alt['confidence'] }}%</div>
+                <span class="badge {% if alt['suitability'] == 'STRONG MATCH' or alt['suitability'] == 'High' %}badge-success{% else %}badge-info{% endif %}" style="font-size: 0.7rem;">
+                  {{ alt['suitability'] }}
+                </span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- RECOMMENDATION HISTORY SECTION (Max 10 visible at once with internal scroll + Filters) -->
+<div id="historyCard" class="card" style="margin-top: 28px;">
+  <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+    <div class="card-title-box">
+      <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i>
+      <div>
+        <h3 class="card-title">Recommendation History</h3>
+        <p class="card-subtitle">Previous model predictions generated for your farm records</p>
+      </div>
+    </div>
+    <div>
+      <span class="badge badge-info" id="historyCounter" style="font-size: 0.8rem; padding: 6px 12px;">
+        Showing {{ history|length }} records
+      </span>
+    </div>
+  </div>
+
+  <!-- History Filters Bar -->
+  <div class="filter-bar">
+    <!-- 1. Search Crop -->
+    <div style="position: relative;">
+      <div class="input-with-icon" style="margin-bottom: 0;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="filterCropSearch" class="form-control" placeholder="Search crop (e.g. Rice)..." style="font-size: 0.85rem; padding-left: 34px;">
+      </div>
+    </div>
+
+    <!-- 2. Suitability Filter -->
+    <div>
+      <select id="filterSuitability" class="form-control" style="font-size: 0.85rem;">
+        <option value="">All Suitabilities</option>
+        <option value="HIGH">High Suitability</option>
+        <option value="MODERATE">Moderate Suitability</option>
+        <option value="LOW">Low Suitability</option>
+      </select>
+    </div>
+
+    <!-- 3. Cropping Season Filter -->
+    <div>
+      <select id="filterSeason" class="form-control" style="font-size: 0.85rem;">
+        <option value="">All Seasons</option>
+        {% for sn in distinct_seasons %}
+          <option value="{{ sn }}">{{ sn }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- 4. Date Filter -->
+    <div>
+      <input type="date" id="filterDate" class="form-control" style="font-size: 0.85rem;" title="Filter by date recorded">
+    </div>
+
+    <!-- 5. Clear Filters Button -->
+    <div>
+      <button type="button" id="clearFiltersBtn" class="btn btn-outline btn-sm" style="height: 38px; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+        <i class="fa-solid fa-arrow-rotate-left"></i>
+        <span>Clear Filters</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Scrollable Table Container (Controlled Max Height, Sticky Header) -->
+  <div class="history-table-container">
+    <table class="data-table" style="margin-bottom: 0;">
+      <thead class="sticky-table-head">
+        <tr>
+          <th>Recommended Crop</th>
+          <th>Suitability</th>
+          <th>Confidence</th>
+          <th>Cropping Season</th>
+          <th>Soil N-P-K-pH</th>
+          <th>Farm Metrics</th>
+          <th>Date Recorded</th>
+        </tr>
+      </thead>
+      <tbody id="historyTableBody">
+        {% for h in history %}
+        <tr class="history-row" 
+            data-crop="{{ h['recommended_crop']|lower }}" 
+            data-suitability="{{ h['suitability']|upper }}" 
+            data-season="{{ h['season']|lower }}" 
+            data-date="{{ h['created_at'][:10] if h['created_at'] else '' }}">
+          <td>
+            <strong style="color: var(--primary);">
+              <i class="fa-solid fa-seedling" style="color: var(--secondary); margin-right: 6px;"></i>
+              {{ h['recommended_crop'] }}
+            </strong>
+          </td>
+          <td>
+            <span class="badge {% if h['suitability'] == 'HIGH' or h['suitability'] == 'High' %}badge-success{% elif h['suitability'] == 'MODERATE' or h['suitability'] == 'Moderate' %}badge-info{% else %}badge-warning{% endif %}">
+              {{ h['suitability'] }}
+            </span>
+          </td>
+          <td><strong>{{ h['confidence'] }}%</strong></td>
+          <td>{{ h['season'] }}</td>
+          <td>
+            {% if h['nitrogen'] is not none %}
+              {{ h['nitrogen']|round|int }} - {{ h['phosphorus']|round|int }} - {{ h['potassium']|round|int }} (pH {{ h['ph'] }})
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>
+            {% if h['rainfall'] %}
+              {{ h['rainfall']|round|int }} mm / {{ h['area']|default(5.0) }} ac
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>{{ h['created_at'][:10] if h['created_at'] else 'Just now' }}</td>
+        </tr>
+        {% else %}
+        <tr id="emptyHistoryRow">
+          <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">
+            <i class="fa-solid fa-seedling" style="font-size: 1.5rem; margin-bottom: 6px; display: block; color: var(--secondary);"></i>
+            No recommendation records found yet. Use the form above to generate your first recommendation.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div id="noFilterMatchMsg" style="display: none; text-align: center; padding: 24px; color: var(--text-muted); background: #ffffff; border: 1px solid var(--border-light); border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md);">
+    <i class="fa-solid fa-filter-circle-xmark" style="font-size: 1.5rem; margin-bottom: 6px; display: block; color: #94a3b8;"></i>
+    No recommendations match the selected filters. <a href="javascript:void(0)" id="resetFilterLink" style="color: var(--primary); font-weight: 600;">Reset Filters</a>
+  </div>
+</div>
+
+<!-- Client-side Interactive Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('cropPredictionForm');
+  const predictBtn = document.getElementById('predictBtn');
+  const predictBtnText = document.getElementById('predictBtnText');
+  const loadingIndicator = document.getElementById('loadingIndicator');
+
+  // Cache user inputs to support exploration Reset
+  let baselineInputs = getFormInputs();
+  let baselinePredictionConfidence = parseFloat(document.getElementById('primaryConfidence')?.textContent) || 50;
+
+  function getFormInputs() {
+    return {
+      state: document.getElementById('state').value,
+      season: document.getElementById('season').value,
+      area: parseFloat(document.getElementById('area').value) || 5.0,
+      rainfall: parseFloat(document.getElementById('rainfall').value) || 1150,
+      fertilizer: parseFloat(document.getElementById('fertilizer').value) || 650,
+      pesticide: parseFloat(document.getElementById('pesticide').value) || 12.0,
+      nitrogen: parseFloat(document.getElementById('nitrogen').value) || 85,
+      phosphorus: parseFloat(document.getElementById('phosphorus').value) || 42,
+      potassium: parseFloat(document.getElementById('potassium').value) || 45,
+      ph: parseFloat(document.getElementById('ph').value) || 6.8
+    };
+  }
+
+  function setFormInputs(data) {
+    if (data.state && document.getElementById('state')) document.getElementById('state').value = data.state;
+    if (data.season && document.getElementById('season')) document.getElementById('season').value = data.season;
+    if (data.area !== undefined && document.getElementById('area')) document.getElementById('area').value = data.area;
+    if (data.rainfall !== undefined && document.getElementById('rainfall')) document.getElementById('rainfall').value = data.rainfall;
+    if (data.fertilizer !== undefined && document.getElementById('fertilizer')) document.getElementById('fertilizer').value = data.fertilizer;
+    if (data.pesticide !== undefined && document.getElementById('pesticide')) document.getElementById('pesticide').value = data.pesticide;
+    if (data.nitrogen !== undefined && document.getElementById('nitrogen')) document.getElementById('nitrogen').value = data.nitrogen;
+    if (data.phosphorus !== undefined && document.getElementById('phosphorus')) document.getElementById('phosphorus').value = data.phosphorus;
+    if (data.potassium !== undefined && document.getElementById('potassium')) document.getElementById('potassium').value = data.potassium;
+    if (data.ph !== undefined && document.getElementById('ph')) document.getElementById('ph').value = data.ph;
+  }
+
+  function clearFieldHighlights() {
+    document.querySelectorAll('.form-control').forEach(el => el.classList.remove('field-highlight-adjusted'));
+  }
+
+  // 0. Agro-Climatic Planning Guide Feature Interactivity (Light Theme & Collapsible)
+  const togglePlanningGuideBtn = document.getElementById('togglePlanningGuideBtn');
+  const planningGuideBody = document.getElementById('planningGuideBody');
+  const planningToggleBtnText = document.getElementById('planningToggleBtnText');
+  const planningToggleIcon = document.getElementById('planningToggleIcon');
+
+  if (togglePlanningGuideBtn && planningGuideBody) {
+    togglePlanningGuideBtn.addEventListener('click', function() {
+      const isHidden = planningGuideBody.style.display === 'none' || !planningGuideBody.style.display;
+      if (isHidden) {
+        planningGuideBody.style.display = 'block';
+        if (planningToggleBtnText) planningToggleBtnText.textContent = 'Minimize Section';
+        if (planningToggleIcon) {
+          planningToggleIcon.classList.remove('fa-chevron-down');
+          planningToggleIcon.classList.add('fa-chevron-up');
+        }
+        togglePlanningGuideBtn.classList.add('active');
+      } else {
+        planningGuideBody.style.display = 'none';
+        if (planningToggleBtnText) planningToggleBtnText.textContent = 'Show Full Section';
+        if (planningToggleIcon) {
+          planningToggleIcon.classList.remove('fa-chevron-up');
+          planningToggleIcon.classList.add('fa-chevron-down');
+        }
+        togglePlanningGuideBtn.classList.remove('active');
+        closeCropDropdown();
+      }
+    });
+  }
+
+  const advisorySearch = document.getElementById('advisoryCropSearch');
+  const advisorySelect = document.getElementById('advisoryCropSelect');
+  const advisoryLoadingSpinner = document.getElementById('advisoryLoadingSpinner');
+  const advisoryEmptyState = document.getElementById('advisoryEmptyState');
+  const advisoryResultContainer = document.getElementById('advisoryResultContainer');
+  const planningActiveLocationText = document.getElementById('planningActiveLocationText');
+
+  // Custom Searchable Dropdown elements
+  const cropCustomTrigger = document.getElementById('cropCustomTrigger');
+  const cropCustomTriggerText = document.getElementById('cropCustomTriggerText');
+  const cropCustomChevron = document.getElementById('cropCustomChevron');
+  const cropCustomDropdown = document.getElementById('cropCustomDropdown');
+  const cropInnerSearchInput = document.getElementById('cropInnerSearchInput');
+  const cropInnerSearchClear = document.getElementById('cropInnerSearchClear');
+  const cropCustomOptionsList = document.getElementById('cropCustomOptionsList');
+  const cropOptionItems = document.querySelectorAll('.crop-option-item');
+  const cropNoResultsMsg = document.getElementById('cropNoResultsMsg');
+
+  function getActiveNavbarLocation() {
+    const locSelect = document.getElementById('globalLocationSelect');
+    if (locSelect && locSelect.value) {
+      return locSelect.value;
+    }
+    if (typeof getStoredLocation === 'function') {
+      const stored = getStoredLocation();
+      if (stored && stored.city) {
+        return `${stored.city}, ${stored.state}, ${stored.country || 'India'}`;
+      }
+    }
+    return 'Patna, Bihar, India';
+  }
+
+  function openCropDropdown() {
+    if (!cropCustomDropdown) return;
+    cropCustomDropdown.classList.add('open');
+    if (cropCustomTrigger) {
+      cropCustomTrigger.classList.add('active');
+      cropCustomTrigger.setAttribute('aria-expanded', 'true');
+    }
+    if (cropCustomChevron) {
+      cropCustomChevron.style.transform = 'rotate(180deg)';
+    }
+    if (cropInnerSearchInput) {
+      setTimeout(() => cropInnerSearchInput.focus(), 50);
+    }
+  }
+
+  function closeCropDropdown() {
+    if (!cropCustomDropdown) return;
+    cropCustomDropdown.classList.remove('open');
+    if (cropCustomTrigger) {
+      cropCustomTrigger.classList.remove('active');
+      cropCustomTrigger.setAttribute('aria-expanded', 'false');
+    }
+    if (cropCustomChevron) {
+      cropCustomChevron.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  function toggleCropDropdown() {
+    if (!cropCustomDropdown) return;
+    if (cropCustomDropdown.classList.contains('open')) {
+      closeCropDropdown();
+    } else {
+      openCropDropdown();
+    }
+  }
+
+  function filterCropOptions(query) {
+    const q = (query || '').trim().toLowerCase();
+    let visibleCount = 0;
+
+    cropOptionItems.forEach(item => {
+      const cropName = (item.getAttribute('data-crop') || '').toLowerCase();
+      const searchData = (item.getAttribute('data-search') || '').toLowerCase();
+      const textContent = item.textContent.toLowerCase();
+
+      if (!q || cropName.includes(q) || searchData.includes(q) || textContent.includes(q)) {
+        item.style.display = 'flex';
+        visibleCount++;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+    if (cropNoResultsMsg) {
+      cropNoResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+    if (cropInnerSearchClear) {
+      cropInnerSearchClear.style.display = q ? 'inline-block' : 'none';
+    }
+  }
+
+  function selectCropOption(cropName) {
+    if (!cropName) return;
+
+    // Update UI highlights
+    cropOptionItems.forEach(item => {
+      if (item.getAttribute('data-crop').toLowerCase() === cropName.toLowerCase()) {
+        item.classList.add('selected');
+      } else {
+        item.classList.remove('selected');
+      }
+    });
+
+    if (cropCustomTriggerText) {
+      cropCustomTriggerText.textContent = cropName;
+    }
+    if (advisorySearch) advisorySearch.value = cropName;
+    if (advisorySelect) advisorySelect.value = cropName;
+
+    closeCropDropdown();
+    loadCropPlan(cropName);
+  }
+
+  // Trigger click & keyboard
+  if (cropCustomTrigger) {
+    cropCustomTrigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleCropDropdown();
+    });
+
+    cropCustomTrigger.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        openCropDropdown();
+      }
+    });
+  }
+
+  // Inner search input filtering
+  if (cropInnerSearchInput) {
+    cropInnerSearchInput.addEventListener('input', function() {
+      filterCropOptions(this.value);
+    });
+
+    cropInnerSearchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeCropDropdown();
+        if (cropCustomTrigger) cropCustomTrigger.focus();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        // Select first visible option
+        const firstVisible = Array.from(cropOptionItems).find(i => i.style.display !== 'none');
+        if (firstVisible) {
+          selectCropOption(firstVisible.getAttribute('data-crop'));
+        }
+      }
+    });
+  }
+
+  // Clear search input button
+  if (cropInnerSearchClear) {
+    cropInnerSearchClear.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (cropInnerSearchInput) {
+        cropInnerSearchInput.value = '';
+        filterCropOptions('');
+        cropInnerSearchInput.focus();
+      }
+    });
+  }
+
+  // Option item clicks
+  cropOptionItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const crop = this.getAttribute('data-crop');
+      selectCropOption(crop);
+    });
+
+    item.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const crop = this.getAttribute('data-crop');
+        selectCropOption(crop);
+      }
+    });
+  });
+
+  // Close when clicking outside dropdown
+  document.addEventListener('click', function(e) {
+    const wrapper = document.querySelector('.crop-select-control-wrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+      closeCropDropdown();
+    }
+  });
+
+  async function loadCropPlan(cropName, customLoc) {
+    if (!cropName || !cropName.trim()) {
+      if (advisoryResultContainer) advisoryResultContainer.style.display = 'none';
+      if (advisoryEmptyState) advisoryEmptyState.style.display = 'block';
+      const statusBadge = document.getElementById('planStatusBadge');
+      if (statusBadge) statusBadge.textContent = 'Select a crop';
+      return;
+    }
+
+    const activeLoc = customLoc || getActiveNavbarLocation();
+    if (planningActiveLocationText) {
+      planningActiveLocationText.textContent = activeLoc;
+    }
+
+    try {
+      if (advisoryLoadingSpinner) advisoryLoadingSpinner.style.display = 'inline-block';
+
+      const res = await fetch(`/api/crop-planning/advisory?crop=${encodeURIComponent(cropName.trim())}&location=${encodeURIComponent(activeLoc)}`);
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        console.warn('Crop planning response:', data.error);
+        return;
+      }
+
+      if (advisoryEmptyState) advisoryEmptyState.style.display = 'none';
+      if (advisoryResultContainer) advisoryResultContainer.style.display = 'block';
+
+      // Status Badge
+      const statusBadge = document.getElementById('planStatusBadge');
+      if (statusBadge) {
+        statusBadge.textContent = data.status;
+        if (data.status_type === 'active') {
+          statusBadge.className = 'badge badge-success';
+          statusBadge.style = 'font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; font-weight: 700;';
+        } else if (data.status_type === 'approaching') {
+          statusBadge.className = 'badge badge-warning';
+          statusBadge.style = 'font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; font-weight: 700;';
+        } else {
+          statusBadge.className = 'badge badge-info';
+          statusBadge.style = 'font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; font-weight: 700;';
+        }
+      }
+
+      // Status Message & Next Window
+      const statusMsgElem = document.getElementById('planStatusMessage');
+      if (statusMsgElem) statusMsgElem.textContent = data.status_message;
+
+      const nextWindowElem = document.getElementById('planNextWindow');
+      if (nextWindowElem) nextWindowElem.textContent = data.next_window;
+
+      // Location Note
+      const locNoteElem = document.getElementById('planLocationNote');
+      if (locNoteElem) {
+        locNoteElem.textContent = data.location_note || `Planning tailored for regional agro-climatic conditions of ${activeLoc}.`;
+      }
+
+      // Metrics
+      const planSeasonElem = document.getElementById('planSeason');
+      if (planSeasonElem) planSeasonElem.textContent = data.season;
+
+      const planSowingElem = document.getElementById('planSowingPeriod');
+      if (planSowingElem) planSowingElem.textContent = data.sowing_period;
+
+      const planTempElem = document.getElementById('planTemperature');
+      if (planTempElem) planTempElem.textContent = data.temperature;
+
+      const planTempDescElem = document.getElementById('planTempDesc');
+      if (planTempDescElem) planTempDescElem.textContent = data.temp_desc;
+
+      const planRainElem = document.getElementById('planRainfall');
+      if (planRainElem) planRainElem.textContent = data.rainfall;
+
+      const planRainDescElem = document.getElementById('planRainfallDesc');
+      if (planRainDescElem) planRainDescElem.textContent = data.rainfall_desc;
+
+      const planSoilTypeElem = document.getElementById('planSoilType');
+      if (planSoilTypeElem) planSoilTypeElem.textContent = data.soil_type;
+
+      const planSoilPhElem = document.getElementById('planSoilPh');
+      if (planSoilPhElem) planSoilPhElem.textContent = `pH ${data.soil_ph}`;
+
+      const planSoilPhDescElem = document.getElementById('planSoilPhDesc');
+      if (planSoilPhDescElem) planSoilPhDescElem.textContent = data.soil_ph_desc;
+
+      const planWaterReqElem = document.getElementById('planWaterReq');
+      if (planWaterReqElem) planWaterReqElem.textContent = data.water_requirement;
+
+      const planWaterDescElem = document.getElementById('planWaterDesc');
+      if (planWaterDescElem) planWaterDescElem.textContent = data.water_desc;
+
+      const planDurationElem = document.getElementById('planDuration');
+      if (planDurationElem) planDurationElem.textContent = data.growing_duration;
+
+      const planHarvestElem = document.getElementById('planHarvestPeriod');
+      if (planHarvestElem) planHarvestElem.textContent = data.harvest_period;
+
+      // Important Conditions List
+      const condList = document.getElementById('planImportantConditions');
+      if (condList) {
+        condList.innerHTML = '';
+        (data.important_conditions || []).forEach(item => {
+          const li = document.createElement('li');
+          li.style.marginBottom = '6px';
+          li.textContent = item;
+          condList.appendChild(li);
+        });
+      }
+
+      // Farming Practices List
+      const pracList = document.getElementById('planFarmingPractices');
+      if (pracList) {
+        pracList.innerHTML = '';
+        (data.farming_practices || []).forEach(item => {
+          const li = document.createElement('li');
+          li.style.marginBottom = '6px';
+          li.textContent = item;
+          pracList.appendChild(li);
+        });
+      }
+
+      // Sync select, text & search inputs
+      if (cropCustomTriggerText) {
+        cropCustomTriggerText.textContent = data.crop_name;
+      }
+      if (advisorySelect && advisorySelect.value !== data.crop_name) {
+        advisorySelect.value = data.crop_name;
+      }
+      if (advisorySearch && advisorySearch.value !== data.crop_name) {
+        advisorySearch.value = data.crop_name;
+      }
+
+    } catch (err) {
+      console.error("Error loading crop plan:", err);
+    } finally {
+      if (advisoryLoadingSpinner) advisoryLoadingSpinner.style.display = 'none';
+    }
+  }
+
+  // Global Navbar Location Sync Listener
+  function onNavbarLocationChanged(newLocStr) {
+    if (planningActiveLocationText) {
+      planningActiveLocationText.textContent = newLocStr;
+    }
+    const currentSelectedCrop = (advisorySearch ? advisorySearch.value.trim() : '') || (advisorySelect ? advisorySelect.value : '');
+    if (currentSelectedCrop) {
+      loadCropPlan(currentSelectedCrop, newLocStr);
+    }
+  }
+
+  window.addEventListener('agriSmartLocationChanged', function(e) {
+    if (e.detail) {
+      const locObj = e.detail;
+      const formatted = `${locObj.city}, ${locObj.state}, ${locObj.country || 'India'}`;
+      onNavbarLocationChanged(formatted);
+    }
+  });
+
+  const globalLocSelect = document.getElementById('globalLocationSelect');
+  if (globalLocSelect) {
+    globalLocSelect.addEventListener('change', function() {
+      onNavbarLocationChanged(this.value);
+    });
+  }
+
+  // Initial Sync on load with stored navbar location
+  const initLoc = getActiveNavbarLocation();
+  if (planningActiveLocationText && initLoc) {
+    planningActiveLocationText.textContent = initLoc;
+  }
+
+  // 1. Regular Form Submission via Asynchronous AJAX
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    clearFieldHighlights();
+    document.getElementById('explorationBox').style.display = 'none';
+
+    const areaVal = parseFloat(document.getElementById('area').value);
+    const rainVal = parseFloat(document.getElementById('rainfall').value);
+    const fertVal = parseFloat(document.getElementById('fertilizer').value);
+    const pestVal = parseFloat(document.getElementById('pesticide').value);
+
+    if (isNaN(areaVal) || areaVal <= 0) {
+      alert("Please enter a valid positive farm area.");
+      return;
+    }
+    if (isNaN(rainVal) || rainVal <= 0) {
+      alert("Please enter a valid annual rainfall amount.");
+      return;
+    }
+    if (isNaN(fertVal) || fertVal < 0) {
+      alert("Please enter a valid non-negative fertilizer usage.");
+      return;
+    }
+    if (isNaN(pestVal) || pestVal < 0) {
+      alert("Please enter a valid non-negative pesticide usage.");
+      return;
+    }
+
+    predictBtn.disabled = true;
+    predictBtn.style.opacity = '0.7';
+    predictBtnText.textContent = "Analyzing Conditions...";
+    loadingIndicator.style.display = 'block';
+
+    const formData = getFormInputs();
+    baselineInputs = { ...formData };
+
+    try {
+      const response = await fetch('/api/crop-recommendation/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Unable to generate crop recommendation. Please check your inputs and try again.");
+      }
+
+      renderPredictionResult(data);
+
+      // Prepend to History Table and enforce 10-record UI limit
+      if (data.history_record) {
+        const tbody = document.getElementById('historyTableBody');
+        const emptyRow = document.getElementById('emptyHistoryRow');
+        if (emptyRow) emptyRow.remove();
+
+        const hr = data.history_record;
+        const newTr = document.createElement('tr');
+        newTr.className = 'history-row';
+        newTr.setAttribute('data-crop', (hr.recommended_crop || '').toLowerCase());
+        newTr.setAttribute('data-suitability', (hr.suitability || '').toUpperCase());
+        newTr.setAttribute('data-season', (hr.season || '').toLowerCase());
+        newTr.setAttribute('data-date', (hr.created_at || '').substring(0, 10));
+
+        newTr.innerHTML = `
+          <td>
+            <strong style="color: var(--primary);">
+              <i class="fa-solid fa-seedling" style="color: var(--secondary); margin-right: 6px;"></i>
+              ${hr.recommended_crop}
+            </strong>
+          </td>
+          <td>
+            <span class="badge ${hr.suitability === 'HIGH' || hr.suitability === 'High' ? 'badge-success' : (hr.suitability === 'MODERATE' || hr.suitability === 'Moderate' ? 'badge-info' : 'badge-warning')}">
+              ${hr.suitability}
+            </span>
+          </td>
+          <td><strong>${hr.confidence}%</strong></td>
+          <td>${hr.season}</td>
+          <td>${Math.round(hr.nitrogen || formData.nitrogen)} - ${Math.round(hr.phosphorus || formData.phosphorus)} - ${Math.round(hr.potassium || formData.potassium)} (pH ${hr.ph || formData.ph})</td>
+          <td>${Math.round(hr.rainfall || formData.rainfall)} mm / ${hr.area || formData.area} ac</td>
+          <td>Just now</td>
+        `;
+        tbody.insertBefore(newTr, tbody.firstChild);
+
+        // Keep maximum 10 latest records in UI
+        const currentRows = tbody.querySelectorAll('tr.history-row');
+        if (currentRows.length > 10) {
+          for (let i = 10; i < currentRows.length; i++) {
+            currentRows[i].remove();
+          }
+        }
+
+        applyHistoryFilters();
+      }
+
+    } catch (err) {
+      console.error("Crop prediction error:", err);
+      alert("Unable to generate crop recommendation. Please check your inputs and try again.");
+    } finally {
+      predictBtn.disabled = false;
+      predictBtn.style.opacity = '1.0';
+      predictBtnText.textContent = "🌱 Get Crop Recommendation";
+      loadingIndicator.style.display = 'none';
+    }
+  });
+
+  function renderPredictionResult(data) {
+    const pm = data.primary_match;
+    document.getElementById('primaryCropName').textContent = pm.recommended_crop;
+    document.getElementById('primaryCropIcon').className = pm.icon || 'fa-solid fa-seedling';
+    document.getElementById('primarySeason').textContent = pm.suitable_season;
+    document.getElementById('primaryConfidence').textContent = pm.confidence + '%';
+    document.getElementById('primarySuitabilityBadge').textContent = 'Suitability: ' + pm.suitability;
+    document.getElementById('primaryRationale').textContent = pm.why_suitable;
+    document.getElementById('primaryGrowingPeriod').textContent = pm.growing_period;
+    document.getElementById('primaryWater').textContent = pm.water_requirement;
+
+    // Reset Target Slider to actual predicted confidence
+    const targetSlider = document.getElementById('targetConfidenceSlider');
+    const targetLabel = document.getElementById('targetSuitabilityVal');
+    if (targetSlider && targetLabel) {
+      const confRound = Math.round(pm.confidence);
+      targetSlider.value = confRound;
+      targetLabel.textContent = confRound;
+      updateTargetSliderVisual(targetSlider);
+      baselinePredictionConfidence = pm.confidence;
+    }
+
+    // Update Farming Tips
+    const tipsList = document.getElementById('primaryFarmingTips');
+    tipsList.innerHTML = '';
+    if (pm.farming_tips && pm.farming_tips.length > 0) {
+      pm.farming_tips.forEach(tip => {
+        const li = document.createElement('li');
+        li.textContent = tip;
+        tipsList.appendChild(li);
+      });
+    }
+
+    // Update Alternative Crops
+    const altContainer = document.getElementById('alternativesList');
+    altContainer.innerHTML = '';
+    if (data.alternatives && data.alternatives.length > 0) {
+      data.alternatives.forEach(alt => {
+        const badgeClass = (alt.suitability === 'STRONG MATCH' || alt.suitability === 'High') ? 'badge-success' : 'badge-info';
+        const altCard = document.createElement('div');
+        altCard.className = 'alt-crop-item';
+        altCard.style = "display: flex; align-items: center; justify-content: space-between; padding: 14px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: #ffffff; cursor: pointer; transition: all 0.2s ease;";
+        altCard.title = `Click to reverse-calculate conditions required for ${alt.name}`;
+        altCard.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 42px; height: 42px; border-radius: var(--radius-md); background: #f0fdf4; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+              <i class="${alt.icon || 'fa-solid fa-seedling'}"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-heading); margin: 0;">${alt.name}</h4>
+              <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; gap: 10px; margin-top: 2px;">
+                <span><i class="fa-regular fa-clock"></i> ${alt.duration}</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-droplet" style="color: #0284c7;"></i> ${alt.water}</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.15rem; font-weight: 800; color: var(--primary);">${alt.confidence}%</div>
+            <span class="badge ${badgeClass}" style="font-size: 0.7rem;">${alt.suitability}</span>
+          </div>
+        `;
+
+        altCard.addEventListener('click', function() {
+          const targetCropSelector = document.getElementById('targetCropSelector');
+          if (targetCropSelector) targetCropSelector.value = alt.name;
+          const confVal = parseInt(targetSlider ? targetSlider.value : 50) || 50;
+          triggerTargetExploration(confVal, alt.name);
+        });
+
+        altContainer.appendChild(altCard);
+      });
+    }
+  }
+
+  // 2. Interactive Target Suitability Explorer Slider & Reverse Crop Selector
+  const targetSlider = document.getElementById('targetConfidenceSlider');
+  const targetValDisplay = document.getElementById('targetSuitabilityVal');
+  const targetCropSelector = document.getElementById('targetCropSelector');
+  let exploreDebounceTimer = null;
+
+  function updateTargetSliderVisual(slider) {
+    const min = parseFloat(slider.min) || 20;
+    const max = parseFloat(slider.max) || 95;
+    const val = parseFloat(slider.value) || min;
+    const pct = Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
+    slider.style.setProperty('--target-pct', pct + '%');
+    slider.style.background = `linear-gradient(to right, #16a34a 0%, #16a34a ${pct}%, #e2e8f0 ${pct}%, #e2e8f0 100%)`;
+  }
+
+  if (targetSlider) {
+    updateTargetSliderVisual(targetSlider);
+
+    targetSlider.addEventListener('input', function() {
+      const targetConf = parseInt(this.value);
+      if (targetValDisplay) targetValDisplay.textContent = targetConf;
+      updateTargetSliderVisual(this);
+
+      clearTimeout(exploreDebounceTimer);
+      exploreDebounceTimer = setTimeout(() => {
+        triggerTargetExploration(targetConf);
+      }, 200);
+    });
+  }
+
+  if (targetCropSelector) {
+    targetCropSelector.addEventListener('change', function() {
+      const targetConf = parseInt(targetSlider ? targetSlider.value : 50) || 50;
+      triggerTargetExploration(targetConf, this.value);
+    });
+  }
+
+  async function triggerTargetExploration(targetConfidence, specificCrop) {
+    const cropToExplore = specificCrop || (targetCropSelector ? targetCropSelector.value : null) || document.getElementById('primaryCropName')?.textContent?.trim() || 'Rice';
+    if (!cropToExplore) return;
+
+    const currentInputs = getFormInputs();
+
+    try {
+      const res = await fetch('/api/crop-recommendation/explore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          crop: cropToExplore,
+          target: targetConfidence,
+          current_inputs: currentInputs
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) return;
+
+      // Auto-fill existing form fields with suggested values
+      clearFieldHighlights();
+      setFormInputs(data.suggested_inputs);
+
+      // Highlight changed fields & display explanation
+      const changesList = document.getElementById('explorationChangesList');
+      if (changesList) {
+        changesList.innerHTML = '';
+        Object.entries(data.changes || {}).forEach(([fieldKey, change]) => {
+          const inputElem = document.getElementById(fieldKey);
+          if (inputElem) {
+            inputElem.classList.add('field-highlight-adjusted');
+          }
+
+          const tag = document.createElement('span');
+          tag.className = 'badge badge-info';
+          tag.style = 'font-size: 0.78rem; padding: 4px 8px; display: inline-flex; align-items: center; gap: 4px;';
+          tag.innerHTML = `<strong>${change.label}:</strong> ${change.from} → <strong>${change.to}${change.unit}</strong> ${change.direction === 'up' ? '↑' : '↓'}`;
+          changesList.appendChild(tag);
+        });
+      }
+
+      const msgElem = document.getElementById('explorationMsg');
+      if (msgElem) msgElem.textContent = data.message;
+      const boxElem = document.getElementById('explorationBox');
+      if (boxElem) boxElem.style.display = 'block';
+
+      // Update Primary Match Card with new crop details
+      if (data.crop_info) {
+        const ci = data.crop_info;
+        const nameElem = document.getElementById('primaryCropName');
+        if (nameElem) nameElem.textContent = ci.crop_name;
+
+        const iconElem = document.getElementById('primaryCropIcon');
+        if (iconElem) iconElem.className = ci.icon || 'fa-solid fa-seedling';
+
+        const seasonElem = document.getElementById('primarySeason');
+        if (seasonElem) seasonElem.textContent = ci.suitable_season;
+
+        const confElem = document.getElementById('primaryConfidence');
+        if (confElem) confElem.textContent = data.achieved_probability + '%';
+
+        const badgeElem = document.getElementById('primarySuitabilityBadge');
+        if (badgeElem) badgeElem.textContent = 'Suitability: ' + ci.suitability;
+
+        const ratElem = document.getElementById('primaryRationale');
+        if (ratElem) ratElem.textContent = ci.why_suitable;
+
+        const growElem = document.getElementById('primaryGrowingPeriod');
+        if (growElem) growElem.textContent = ci.growing_period;
+
+        const waterElem = document.getElementById('primaryWater');
+        if (waterElem) waterElem.textContent = ci.water_requirement;
+
+        // Update tips
+        const tipsList = document.getElementById('primaryFarmingTips');
+        if (tipsList && ci.farming_tips && ci.farming_tips.length > 0) {
+          tipsList.innerHTML = '';
+          ci.farming_tips.forEach(tip => {
+            const li = document.createElement('li');
+            li.textContent = tip;
+            tipsList.appendChild(li);
+          });
+        }
+
+        // Sync dropdown selector
+        if (targetCropSelector && targetCropSelector.value !== ci.crop_name) {
+          targetCropSelector.value = ci.crop_name;
+        }
+      }
+
+    } catch (err) {
+      console.warn("Exploration request notice:", err);
+    }
+  }
+
+  // "Apply & Recalculate" Button
+  const applyBtn = document.getElementById('applyRecalculateBtn');
+  if (applyBtn) {
+    applyBtn.addEventListener('click', function() {
+      form.dispatchEvent(new Event('submit', { cancelable: true }));
+    });
+  }
+
+  // "Reset Explorer" Button
+  const resetBtn = document.getElementById('resetExplorerBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      clearFieldHighlights();
+      setFormInputs(baselineInputs);
+      document.getElementById('explorationBox').style.display = 'none';
+      if (targetSlider) {
+        targetSlider.value = Math.round(baselinePredictionConfidence);
+        targetValDisplay.textContent = Math.round(baselinePredictionConfidence);
+        updateTargetSliderVisual(targetSlider);
+      }
+    });
+  }
+
+  // 3. Recommendation History Filtering Engine
+  const filterCrop = document.getElementById('filterCropSearch');
+  const filterSuitability = document.getElementById('filterSuitability');
+  const filterSeason = document.getElementById('filterSeason');
+  const filterDate = document.getElementById('filterDate');
+  const clearBtn = document.getElementById('clearFiltersBtn');
+  const resetLink = document.getElementById('resetFilterLink');
+  const historyCounter = document.getElementById('historyCounter');
+  const noMatchMsg = document.getElementById('noFilterMatchMsg');
+
+  function applyHistoryFilters() {
+    const cropVal = (filterCrop.value || '').trim().toLowerCase();
+    const suitVal = (filterSuitability.value || '').trim().toUpperCase();
+    const seasonVal = (filterSeason.value || '').trim().toLowerCase();
+    const dateVal = (filterDate.value || '').trim();
+
+    const rows = document.querySelectorAll('#historyTableBody tr.history-row');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const rCrop = row.getAttribute('data-crop') || '';
+      const rSuit = row.getAttribute('data-suitability') || '';
+      const rSeason = row.getAttribute('data-season') || '';
+      const rDate = row.getAttribute('data-date') || '';
+
+      const matchCrop = !cropVal || rCrop.includes(cropVal);
+      const matchSuit = !suitVal || rSuit === suitVal || (suitVal === 'HIGH' && rSuit === 'HIGH') || (suitVal === 'MODERATE' && rSuit === 'MODERATE') || (suitVal === 'LOW' && rSuit === 'LOW');
+      const matchSeason = !seasonVal || rSeason.includes(seasonVal);
+      const matchDate = !dateVal || rDate.startsWith(dateVal);
+
+      if (matchCrop && matchSuit && matchSeason && matchDate) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    if (historyCounter) {
+      historyCounter.textContent = `Showing ${visibleCount} records`;
+    }
+
+    if (noMatchMsg) {
+      noMatchMsg.style.display = (visibleCount === 0 && rows.length > 0) ? 'block' : 'none';
+    }
+  }
+
+  function clearAllFilters() {
+    filterCrop.value = '';
+    filterSuitability.value = '';
+    filterSeason.value = '';
+    filterDate.value = '';
+    applyHistoryFilters();
+  }
+
+  if (filterCrop) filterCrop.addEventListener('input', applyHistoryFilters);
+  if (filterSuitability) filterSuitability.addEventListener('change', applyHistoryFilters);
+  if (filterSeason) filterSeason.addEventListener('change', applyHistoryFilters);
+  if (filterDate) filterDate.addEventListener('change', applyHistoryFilters);
+  if (clearBtn) clearBtn.addEventListener('click', clearAllFilters);
+  if (resetLink) resetLink.addEventListener('click', clearAllFilters);
+
+  applyHistoryFilters();
+});
+</script>
+{% endblock %}

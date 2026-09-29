@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}Market Price{% endblock %}
+{% block page_title %}Market Price{% endblock %}
+{% block breadcrumb_item %}Market Price{% endblock %}
+
+{% block content %}
+
+<!-- SEARCH & FILTER BAR CARD (ONLY 2 INPUTS: State & Crop Name) -->
+<div class="card" style="margin-bottom: 28px; background: #ffffff;">
+  <form method="GET" action="{{ url_for('mandi.index') }}" id="mandiFilterForm">
+    <input type="hidden" name="year" id="formYearInput" value="{{ selected_year or '2026' }}">
+    <input type="hidden" name="table_crop" id="formTableCropInput" value="{{ table_crop or selected_crop or 'Wheat' }}">
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: flex-end;">
+      
+      <!-- 1. State Filter (All 28 States) -->
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="state" style="font-size: 0.84rem; font-weight: 700; color: #166534;">
+          <i class="fa-solid fa-location-dot" style="color: var(--primary); margin-right: 4px;"></i> State
+        </label>
+        <select id="state" name="state" class="form-control" style="padding: 10px 14px; font-size: 0.9rem; border-color: #bbf7d0; background-color: #fcfdfc;" required>
+          <option value="">-- Select State (28 States) --</option>
+          {% for s in filters['states'] %}
+            <option value="{{ s }}" {% if selected_state == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- 2. Crop Name Filter (All 31 Crops) -->
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="crop" style="font-size: 0.84rem; font-weight: 700; color: #166534;">
+          <i class="fa-solid fa-seedling" style="color: var(--secondary); margin-right: 4px;"></i> Crop Name
+        </label>
+        <select id="crop" name="crop" class="form-control" style="padding: 10px 14px; font-size: 0.9rem; border-color: #bbf7d0; background-color: #fcfdfc;" required>
+          <option value="">-- Select Crop Name (31 Crops) --</option>
+          {% for c in filters['crops'] %}
+            <option value="{{ c }}" {% if selected_crop == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Action Button -->
+      <div>
+        <button type="submit" class="btn btn-primary" style="padding: 11px 22px; font-size: 0.9rem; font-weight: 700;">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>View Price Trend</span>
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+{% if has_selection and stats %}
+<!-- 3 MAIN THIS MONTH PRICE CARDS & OVERVIEW -->
+<section class="stats-grid-4" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 28px;">
+  <!-- Minimum Price Card (This Month) -->
+  <div class="stat-card" style="border-left: 4px solid #65a30d;">
+    <div class="stat-card-header">
+      <span class="stat-label" style="color: #4d7c0f; font-weight: 700;">MINIMUM PRICE</span>
+      <div class="stat-icon-wrapper" style="background: #f7fee7; color: #65a30d;">
+        <i class="fa-solid fa-arrow-down"></i>
+      </div>
+    </div>
+    <div class="stat-main-value" style="color: #3f6212;">₹{{ "{:,.0f}".format(stats['min_price']) }}</div>
+    <div class="stat-sub-detail">
+      <span>Per Quintal • {{ stats['period_label'] }}</span>
+    </div>
+  </div>
+
+  <!-- Modal Price Card (This Month Benchmark) -->
+  <div class="stat-card" style="border-left: 4px solid #15803d; background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);">
+    <div class="stat-card-header">
+      <span class="stat-label" style="color: #15803d; font-weight: 800;">MODAL (BENCHMARK) PRICE</span>
+      <div class="stat-icon-wrapper" style="background: #dcfce7; color: #15803d;">
+        <i class="fa-solid fa-scale-balanced"></i>
+      </div>
+    </div>
+    <div class="stat-main-value" style="color: #15803d; font-weight: 800;">₹{{ "{:,.0f}".format(stats['modal_price']) }}</div>
+    <div class="stat-sub-detail">
+      <span style="color: #15803d; font-weight: 700;">
+        <i class="fa-solid fa-arrow-trend-up"></i> {{ stats['price_change'] }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Maximum Price Card (This Month) -->
+  <div class="stat-card" style="border-left: 4px solid #047857;">
+    <div class="stat-card-header">
+      <span class="stat-label" style="color: #047857; font-weight: 700;">MAXIMUM PRICE</span>
+      <div class="stat-icon-wrapper" style="background: #ecfdf5; color: #047857;">
+        <i class="fa-solid fa-arrow-up"></i>
+      </div>
+    </div>
+    <div class="stat-main-value" style="color: #065f46;">₹{{ "{:,.0f}".format(stats['max_price']) }}</div>
+    <div class="stat-sub-detail">
+      <span>Top trading rate • {{ stats['period_label'] }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- 1-YEAR PRICE MOVEMENT TREND WITH YEAR SELECTOR IN HEADER -->
+<section class="card" style="margin-bottom: 28px;">
+  <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div class="card-title-box">
+      <i class="fa-solid fa-chart-line" style="color: var(--primary);"></i>
+      <div>
+        <h3 class="card-title" id="chartTitleText">{{ stats['primary_crop'] }} Monthly Price Movement Trend (<span id="chartYearLabel">{{ selected_year }}</span>)</h3>
+        <p class="card-subtitle">12-month trajectory for {{ stats['state'] }} • Minimum, Modal Benchmark & Maximum wholesale prices</p>
+      </div>
+    </div>
+    
+    <!-- Year Selector in Graph Header -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 0.82rem; font-weight: 700; color: #166534; white-space: nowrap;">
+        <i class="fa-regular fa-calendar-days" style="color: var(--primary); margin-right: 4px;"></i> Select Year:
+      </span>
+      <div class="year-toggle-group" style="display: inline-flex; background: #eef6f0; padding: 3px; border-radius: 8px; border: 1px solid #bbf7d0;">
+        <button type="button" class="btn btn-sm year-btn {% if selected_year == 2026 %}btn-primary{% else %}btn-secondary{% endif %}" data-year="2026" style="padding: 4px 14px; font-size: 0.82rem; font-weight: 700; border-radius: 6px;">2026</button>
+        <button type="button" class="btn btn-sm year-btn {% if selected_year == 2025 %}btn-primary{% else %}btn-secondary{% endif %}" data-year="2025" style="padding: 4px 14px; font-size: 0.82rem; font-weight: 700; border-radius: 6px;">2025</button>
+      </div>
+    </div>
+  </div>
+  
+  <div style="height: 320px; position: relative; padding: 6px 0;">
+    <canvas id="mandiPriceChartCanvas"></canvas>
+  </div>
+</section>
+
+{% else %}
+<!-- CLEAN EMPTY STATE -->
+<section class="card" style="margin-bottom: 28px; padding: 48px 24px; text-align: center; background: #ffffff; border: 1px dashed #bbf7d0;">
+  <div style="width: 64px; height: 64px; border-radius: 50%; background: #dcfce7; color: #15803d; display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 16px;">
+    <i class="fa-solid fa-arrow-pointer"></i>
+  </div>
+  <h3 style="font-size: 1.25rem; font-weight: 800; color: #166534; margin-bottom: 8px;">
+    Select a State and Crop Name to view the price trend.
+  </h3>
+  <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 520px; margin: 0 auto;">
+    Choose a state from all 28 available states and a crop commodity from all 31 crops in the dropdowns above to explore the 12-month wholesale market price movement.
+  </p>
+</section>
+{% endif %}
+
+<!-- LIVE MANDI MARKET RATES TABLE (With Crop Selector & District/APMC Mandi Removed) -->
+<section class="card">
+  <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div class="card-title-box">
+      <i class="fa-solid fa-table-list" style="color: var(--secondary);"></i>
+      <div>
+        <h3 class="card-title">Live Mandi Market Rates</h3>
+        <p class="card-subtitle">State-wise wholesale market price comparison in current month (September 2026)</p>
+      </div>
+    </div>
+    
+    <!-- Crop Selector for Live Market Rates Table -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <label for="tableCropSelect" style="font-size: 0.84rem; font-weight: 700; color: #166534; white-space: nowrap;">
+        <i class="fa-solid fa-wheat-awn" style="color: var(--secondary); margin-right: 4px;"></i> Select Crop:
+      </label>
+      <select id="tableCropSelect" class="form-control form-control-sm" style="padding: 6px 14px; font-size: 0.86rem; font-weight: 700; border-color: #86efac; border-radius: 6px; cursor: pointer; color: #15803d; background: #f0fdf4; min-width: 160px;">
+        {% for c in filters['crops'] %}
+          <option value="{{ c }}" {% if table_crop == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive" style="max-height: 500px; overflow-y: auto; overflow-x: auto; border: 1px solid var(--border-light); border-radius: var(--radius-md); position: relative;">
+    <table class="data-table" id="liveMandiTable" style="margin-bottom: 0;">
+      <thead style="position: sticky; top: 0; z-index: 5; background-color: #f1f8f3; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+        <tr>
+          <th style="background-color: #f1f8f3;">Crop Commodity</th>
+          <th style="background-color: #f1f8f3;">State</th>
+          <th style="background-color: #f1f8f3;">Date</th>
+          <th style="background-color: #f1f8f3;">Min Price (₹)</th>
+          <th style="background-color: #f1f8f3;">Max Price (₹)</th>
+          <th style="background-color: #f1f8f3;">Modal Price (₹)</th>
+        </tr>
+      </thead>
+      <tbody id="liveMandiTableBody">
+        {% for row in records %}
+        <tr>
+          <td>
+            <strong style="color: var(--primary); font-size: 0.95rem;">
+              <i class="fa-solid fa-seedling" style="color: var(--secondary); margin-right: 6px;"></i>
+              {{ row['crop'] }}
+            </strong>
+          </td>
+          <td><strong style="color: #1e293b;">{{ row['state'] }}</strong></td>
+          <td><span style="font-size: 0.82rem; color: var(--text-muted);">{{ row['date'] }}</span></td>
+          <td>₹{{ "{:,.0f}".format(row['min_price']) }}</td>
+          <td>₹{{ "{:,.0f}".format(row['max_price']) }}</td>
+          <td>
+            <strong style="color: #15803d; background: #eaf8ee; padding: 4px 10px; border-radius: 6px;">
+              ₹{{ "{:,.0f}".format(row['modal_price']) }}
+            </strong>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    {% if has_selection and yearly_data %}
+    const yearlyData = {{ yearly_data | tojson }};
+    let currentYear = "{{ selected_year or '2026' }}";
+    
+    function renderYearChart(yr) {
+      currentYear = String(yr);
+      const dataForYear = yearlyData[currentYear];
+      if (dataForYear && window.renderMandiPriceChart) {
+        window.renderMandiPriceChart('mandiPriceChartCanvas', dataForYear);
+        const yearLabel = document.getElementById('chartYearLabel');
+        if (yearLabel) yearLabel.textContent = currentYear;
+        
+        // Update Year Toggle Button active classes
+        document.querySelectorAll('.year-btn').forEach(btn => {
+          if (btn.getAttribute('data-year') === currentYear) {
+            btn.className = 'btn btn-sm year-btn btn-primary';
+          } else {
+            btn.className = 'btn btn-sm year-btn btn-secondary';
+          }
+        });
+        
+        const yearHiddenInput = document.getElementById('formYearInput');
+        if (yearHiddenInput) yearHiddenInput.value = currentYear;
+      }
+    }
+
+    // Initial 1-year chart render
+    renderYearChart(currentYear);
+
+    // Year Toggle Click Listener
+    document.querySelectorAll('.year-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const yr = e.currentTarget.getAttribute('data-year');
+        renderYearChart(yr);
+      });
+    });
+    {% endif %}
+
+    // Table Crop Selector Change Listener
+    const tableCropSelect = document.getElementById('tableCropSelect');
+    if (tableCropSelect) {
+      tableCropSelect.addEventListener('change', (e) => {
+        const selectedCrop = e.target.value;
+        const formTableCropInput = document.getElementById('formTableCropInput');
+        if (formTableCropInput) formTableCropInput.value = selectedCrop;
+        
+        // Fetch new state rates for the selected crop
+        fetch(`/mandi/api/table-rates?crop=${encodeURIComponent(selectedCrop)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success && data.records) {
+              const tbody = document.getElementById('liveMandiTableBody');
+              if (tbody) {
+                tbody.innerHTML = data.records.map(row => `
+                  <tr>
+                    <td>
+                      <strong style="color: var(--primary); font-size: 0.95rem;">
+                        <i class="fa-solid fa-seedling" style="color: var(--secondary); margin-right: 6px;"></i>
+                        ${row.crop}
+                      </strong>
+                    </td>
+                    <td><strong style="color: #1e293b;">${row.state}</strong></td>
+                    <td><span style="font-size: 0.82rem; color: var(--text-muted);">${row.date}</span></td>
+                    <td>₹${Number(row.min_price).toLocaleString('en-IN')}</td>
+                    <td>₹${Number(row.max_price).toLocaleString('en-IN')}</td>
+                    <td>
+                      <strong style="color: #15803d; background: #eaf8ee; padding: 4px 10px; border-radius: 6px;">
+                        ₹${Number(row.modal_price).toLocaleString('en-IN')}
+                      </strong>
+                    </td>
+                  </tr>
+                `).join('');
+              }
+            }
+          })
+          .catch(err => console.error('Error fetching state rates for crop:', err));
+      });
+    }
+
+    // Auto-submit when both State and Crop dropdowns are selected
+    const stateSelect = document.getElementById('state');
+    const cropSelect = document.getElementById('crop');
+    const form = document.getElementById('mandiFilterForm');
+
+    function checkAndSubmit() {
+      if (stateSelect && cropSelect && stateSelect.value && cropSelect.value) {
+        form.submit();
+      }
+    }
+
+    if (stateSelect) stateSelect.addEventListener('change', checkAndSubmit);
+    if (cropSelect) cropSelect.addEventListener('change', checkAndSubmit);
+  });
+</script>
+{% endblock %}

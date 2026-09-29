@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Farmer Profile{% endblock %}
+{% block page_title %}Farmer Profile{% endblock %}
+{% block breadcrumb_item %}Profile{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+  <h2 style="font-size: 1.45rem; font-weight: 800; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+    <i class="fa-solid fa-user-gear" style="color: var(--secondary);"></i>
+    <span>Farmer & Land Holding Profile</span>
+  </h2>
+  <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 2px;">
+    Manage your personal details, farm coordinates, landholding area, and primary crop profiles.
+  </p>
+</div>
+
+<div class="grid-2" style="align-items: start;">
+  <!-- LEFT: Farmer Bio & Summary Card -->
+  <div>
+    <div class="card" style="margin-bottom: 24px; text-align: center; padding: 32px 24px;">
+      <div style="width: 100px; height: 100px; margin: 0 auto 16px; border-radius: 50%; border: 3px solid var(--accent); padding: 4px; background: #ffffff; box-shadow: var(--shadow-md);">
+        <img src="{{ url_for('static', filename='images/farmer_avatar.svg') }}" alt="Farmer Avatar" style="width: 100%; height: 100%; border-radius: 50%;">
+      </div>
+
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-heading);">{{ user['name'] }}</h3>
+      <p style="color: var(--secondary); font-weight: 600; font-size: 0.92rem; margin-top: 2px;">
+        <i class="fa-solid fa-seedling"></i> Progressive Farmer
+      </p>
+      <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">
+        <i class="fa-solid fa-location-dot" style="color: var(--secondary);"></i> {{ user['location'] or 'Meerut, Uttar Pradesh' }}
+      </div>
+
+      <!-- Quick Farm Overview Badges -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-light);">
+        <div style="background: #f4f9f5; padding: 12px 6px; border-radius: var(--radius-md);">
+          <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">{{ stats['soil_tests'] }}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Soil Tests</div>
+        </div>
+
+        <div style="background: #f4f9f5; padding: 12px 6px; border-radius: var(--radius-md);">
+          <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">{{ stats['crop_recommendations'] }}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Crop Recs</div>
+        </div>
+
+        <div style="background: #f4f9f5; padding: 12px 6px; border-radius: var(--radius-md);">
+          <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">{{ stats['disease_scans'] }}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Leaf Scans</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Farm Credentials Overview List -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title-box">
+          <i class="fa-solid fa-address-card" style="color: var(--primary);"></i>
+          <h3 class="card-title">Land & Account Information</h3>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.9rem;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <span style="color: var(--text-muted);">Registered Email:</span>
+          <strong>{{ user['email'] }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <span style="color: var(--text-muted);">Phone Number:</span>
+          <strong>{{ user['phone'] or '+91 98765 43210' }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <span style="color: var(--text-muted);">Village / Block:</span>
+          <strong>{{ user['village'] or 'Hastinapur Block 4' }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <span style="color: var(--text-muted);">Land Holding:</span>
+          <strong style="color: var(--primary);">{{ user['land_area'] or '4.5 Acres' }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <span style="color: var(--text-muted);">Soil Type:</span>
+          <strong>{{ user['soil_type'] or 'Alluvial Loam' }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);">Primary Crops:</span>
+          <strong style="color: var(--secondary);">{{ user['main_crop'] or 'Wheat & Sugarcane' }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Edit Farm Profile Form -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-box">
+        <i class="fa-solid fa-pen-to-square" style="color: var(--secondary);"></i>
+        <div>
+          <h3 class="card-title">Edit Farm Profile</h3>
+          <p class="card-subtitle">Keep your farm details updated for accurate advisories</p>
+        </div>
+      </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('profile.index') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="name">Farmer Name</label>
+          <div class="input-with-icon">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" id="name" name="name" class="form-control" value="{{ user['name'] }}" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="phone">Phone Number</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" id="phone" name="phone" class="form-control" value="{{ user['phone'] or '' }}">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="location">District / State</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-location-dot"></i>
+            <input type="text" id="location" name="location" class="form-control" value="{{ user['location'] or '' }}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="village">Village / Block</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-landmark"></i>
+            <input type="text" id="village" name="village" class="form-control" value="{{ user['village'] or '' }}">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="land_area">Total Land Holding</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-chart-area"></i>
+            <input type="text" id="land_area" name="land_area" class="form-control" value="{{ user['land_area'] or '' }}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="soil_type">Dominant Soil Type</label>
+          <select id="soil_type" name="soil_type" class="form-control">
+            <option value="Alluvial Loam" {% if user['soil_type'] == 'Alluvial Loam' %}selected{% endif %}>Alluvial Loam</option>
+            <option value="Clay Loam" {% if user['soil_type'] == 'Clay Loam' %}selected{% endif %}>Clay Loam</option>
+            <option value="Black Cotton Soil" {% if user['soil_type'] == 'Black Cotton Soil' %}selected{% endif %}>Black Cotton Soil</option>
+            <option value="Sandy Loam" {% if user['soil_type'] == 'Sandy Loam' %}selected{% endif %}>Sandy Loam</option>
+            <option value="Red & Yellow Soil" {% if user['soil_type'] == 'Red & Yellow Soil' %}selected{% endif %}>Red & Yellow Soil</option>
+            <option value="Laterite Soil" {% if user['soil_type'] == 'Laterite Soil' %}selected{% endif %}>Laterite Soil</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="main_crop">Main Cultivated Crops</label>
+        <div class="input-with-icon">
+          <i class="fa-solid fa-wheat-awn"></i>
+          <input type="text" id="main_crop" name="main_crop" class="form-control" value="{{ user['main_crop'] or '' }}" placeholder="e.g. Wheat, Sugarcane, Mustard">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 10px;">
+        <i class="fa-solid fa-floppy-disk"></i>
+        <span>Save Farm Profile Updates</span>
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,645 @@
+{% extends "base.html" %}
+
+{% block title %}Crop Disease Detection{% endblock %}
+{% block page_title %}Crop Disease Detection{% endblock %}
+{% block breadcrumb_item %}Disease Scanner{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+  <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 2px;">
+    Upload a clear photograph of an affected crop leaf to identify fungal, bacterial, or physiological plant disorders with immediate treatment guidance.
+  </p>
+</div>
+
+<!-- MODEL STATUS BANNER IF NOT TRAINED -->
+{% if not model_ready %}
+<div class="card" style="margin-bottom: 24px; border: 1.5px solid #f59e0b; background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);">
+  <div style="display: flex; align-items: flex-start; gap: 14px;">
+    <div style="width: 44px; height: 44px; border-radius: 10px; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0;">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <div style="flex: 1;">
+      <h3 style="font-size: 1.1rem; font-weight: 800; color: #92400e; margin-bottom: 4px;">
+        Disease detection model is not trained yet.
+      </h3>
+      <p style="font-size: 0.86rem; color: #78350f; margin-bottom: 10px; line-height: 1.5;">
+        The real TensorFlow/Keras neural network model has not been trained on your system. To enable automated image classification across all 38 PlantVillage crop disease classes, run the training command below:
+      </p>
+      <div style="background: #1e293b; color: #38bdf8; padding: 10px 14px; border-radius: 6px; font-family: monospace; font-size: 0.88rem; display: inline-block;">
+        python ml/disease/train_model.py
+      </div>
+      <div style="font-size: 0.78rem; color: #92400e; margin-top: 8px;">
+        <i class="fa-solid fa-circle-info"></i> Place the PlantVillage dataset in <code>data/PlantVillage/</code> or specify <code>--data_dir &lt;path&gt;</code>.
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="grid-2" style="align-items: start;">
+  <!-- LEFT: Image Upload Box -->
+  <div>
+    <div class="card" style="margin-bottom: 20px;">
+      <div class="card-header">
+        <div class="card-title-box">
+          <i class="fa-solid fa-camera" style="color: var(--primary);"></i>
+          <div>
+            <h3 class="card-title">Upload Leaf Image</h3>
+            <p class="card-subtitle">Take a close-up photo of the symptomatic leaf blade</p>
+          </div>
+        </div>
+      </div>
+
+      <form method="POST" action="{{ url_for('disease.index') }}" enctype="multipart/form-data" id="diseaseUploadForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <!-- Drag & Drop Dropzone Box -->
+        <div class="upload-dropzone" id="uploadDropzone" style="cursor: pointer;">
+          <input type="file" name="image" id="leafImageInput" class="upload-input-hidden" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+          
+          <div id="uploadPlaceholder">
+            <div class="upload-icon">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-heading); margin-bottom: 4px;">
+              Upload Crop Leaf Image
+            </h3>
+            <p style="font-size: 0.86rem; color: var(--text-muted);">
+              Drag & drop your leaf photo here or <span style="color: var(--secondary); font-weight: 700; text-decoration: underline;">click to browse</span>
+            </p>
+            <div style="font-size: 0.76rem; color: var(--text-light); margin-top: 8px;">
+              Supported formats: JPG, JPEG, PNG, WEBP (Max 16 MB)
+            </div>
+          </div>
+
+          <!-- Preview Container -->
+          <div id="uploadPreviewContainer" style="display: none;">
+            <img id="uploadPreviewImg" src="" alt="Leaf Preview" style="max-height: 180px; margin: 0 auto 10px; border-radius: var(--radius-md); border: 1px solid var(--border-light); object-fit: contain;">
+            <div id="uploadFileName" style="font-size: 0.85rem; font-weight: 700; color: var(--primary-dark);"></div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Click to change image</div>
+          </div>
+        </div>
+
+        <div id="uploadErrorAlert" style="display: none; margin-top: 12px; padding: 10px 14px; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-sm); color: #dc2626; font-size: 0.85rem;">
+          <i class="fa-solid fa-circle-exclamation" style="margin-right: 6px;"></i>
+          <span id="uploadErrorMsg"></span>
+        </div>
+
+        <button type="submit" id="analyzeBtn" class="btn btn-primary btn-block btn-lg" style="margin-top: 16px;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>🔍 Detect Crop Disease</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Instructions & Guidelines Card -->
+    <div class="card">
+      <h4 style="font-size: 0.92rem; font-weight: 700; color: var(--text-heading); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+        <i class="fa-solid fa-lightbulb" style="color: var(--secondary);"></i>
+        <span>Best Practices for High Accuracy Scan:</span>
+      </h4>
+      <ul style="padding-left: 20px; font-size: 0.82rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+        <li>Capture a clear, close-up photograph of a single affected leaf.</li>
+        <li>Ensure adequate daylight without harsh glare or heavy shadows.</li>
+        <li>Place the diseased spots or discoloration in the center of the frame.</li>
+        <li>Supported crops: Tomato, Potato, Corn, Apple, Grape, Pepper, Cherry, Strawberry, etc.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RIGHT: Diagnosis & Treatment Result Card -->
+  <div id="diseaseResultContainer">
+    {% if result %}
+      {% if result['status'] == 'low_confidence' %}
+        <!-- LOW CONFIDENCE WARNING CARD -->
+        <div class="card" style="border: 2px solid #f59e0b; background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+            <div>
+              <span class="badge" style="background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; font-size: 0.78rem; margin-bottom: 8px;">
+                <i class="fa-solid fa-circle-question"></i> Low Confidence Diagnosis
+              </span>
+              <h3 style="font-size: 1.35rem; font-weight: 800; color: #92400e; margin-top: 4px;">
+                {{ result['disease'] }}
+              </h3>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 1.8rem; font-weight: 800; color: #d97706;">
+                {{ result['confidence'] }}%
+              </div>
+              <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">Confidence Score</span>
+            </div>
+          </div>
+
+          {% if uploaded_image_url %}
+          <div style="margin-bottom: 20px; text-align: center; background: #f8faf8; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <img src="{{ uploaded_image_url }}" alt="Analyzed Leaf" style="max-height: 180px; margin: 0 auto; border-radius: var(--radius-sm); object-fit: contain;">
+          </div>
+          {% endif %}
+
+          <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: 16px;">
+            <h4 style="font-size: 0.95rem; font-weight: 700; color: #92400e; margin-bottom: 8px;">
+              <i class="fa-solid fa-camera-rotate" style="margin-right: 6px;"></i> Suggestions for Retake:
+            </h4>
+            <ul style="padding-left: 20px; font-size: 0.86rem; color: #78350f; display: flex; flex-direction: column; gap: 6px;">
+              {% for t in result['treatment'] %}
+                <li>{{ t }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+      {% else %}
+        <!-- STANDARD SUCCESSFUL DIAGNOSIS RESULT CARD -->
+        <div class="card" style="border: 2px solid {% if result['is_healthy'] %}#22c55e{% else %}#ef4444{% endif %}; background: linear-gradient(180deg, #ffffff 0%, #fafdfb 100%);">
+          
+          <!-- Result Header -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+            <div>
+              <span class="badge {% if result['is_healthy'] %}badge-success{% else %}badge-danger{% endif %}" style="font-size: 0.78rem; margin-bottom: 8px;">
+                <i class="fa-solid {% if result['is_healthy'] %}fa-circle-check{% else %}fa-triangle-exclamation{% endif %}"></i>
+                {% if result['is_healthy'] %}Healthy Specimen{% else %}Pathogen Detected{% endif %} • {{ result['crop'] }}
+              </span>
+              
+              <h3 style="font-size: 1.55rem; font-weight: 800; color: var(--text-heading); margin-top: 4px;">
+                {{ result['disease'] }}
+              </h3>
+            </div>
+
+            <div style="text-align: right;">
+              <div style="font-size: 2rem; font-weight: 800; color: {% if result['is_healthy'] %}#16a34a{% else %}#dc2626{% endif %};">
+                {{ result['confidence'] }}%
+              </div>
+              <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">Diagnosis Confidence</span>
+            </div>
+          </div>
+
+          <!-- Confidence Progress Bar -->
+          <div class="progress-bar-container" style="height: 10px; margin-bottom: 20px;">
+            <div class="progress-bar-fill" style="width: {{ result['confidence'] }}%; background: {% if result['is_healthy'] %}linear-gradient(90deg, #52b788, #16a34a){% else %}linear-gradient(90deg, #f87171, #dc2626){% endif %};"></div>
+          </div>
+
+          <!-- Scanned Leaf Graphic / Image Preview -->
+          {% if uploaded_image_url %}
+          <div style="margin-bottom: 20px; text-align: center; background: #f8faf8; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <img src="{{ uploaded_image_url }}" alt="Analyzed Leaf" style="max-height: 180px; margin: 0 auto; border-radius: var(--radius-sm); object-fit: contain;">
+          </div>
+          {% endif %}
+
+          <!-- Symptoms Checklist -->
+          <div style="margin-bottom: 20px;">
+            <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-heading); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-stethoscope" style="color: var(--secondary);"></i>
+              <span>Symptoms</span>
+            </h4>
+            <ul style="padding-left: 20px; font-size: 0.88rem; color: var(--text-main); display: flex; flex-direction: column; gap: 6px;">
+              {% for s in result['symptoms'] %}
+                <li>{{ s }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- Recommended Action & Treatment Protocol -->
+          <div style="background: {% if result['is_healthy'] %}#edf9ee{% else %}#fef2f2{% endif %}; border: 1px solid {% if result['is_healthy'] %}#bbf7d0{% else %}#fecaca{% endif %}; border-radius: var(--radius-md); padding: 18px;">
+            <h4 style="font-size: 1rem; font-weight: 700; color: {% if result['is_healthy'] %}#14532d{% else %}#991b1b{% endif %}; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-shield-virus" style="color: {% if result['is_healthy'] %}#16a34a{% else %}#dc2626{% endif %};"></i>
+              <span>Recommended Action:</span>
+            </h4>
+            <ul style="padding-left: 20px; font-size: 0.88rem; color: {% if result['is_healthy'] %}#14532d{% else %}#7f1d1d{% endif %}; display: flex; flex-direction: column; gap: 8px;">
+              {% for t in result['treatment'] %}
+                <li>{{ t }}</li>
+              {% endfor %}
+            </ul>
+
+            {% if result['prevention'] %}
+            <div style="margin-top: 14px; font-size: 0.82rem; color: {% if result['is_healthy'] %}#166534{% else %}#991b1b{% endif %}; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 8px;">
+              <strong>🛡️ Prevention:</strong> {{ result['prevention'] }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <!-- EMPTY STATE / AWAITING SCAN -->
+      <div class="card" style="padding: 40px 24px; text-align: center; background: #ffffff; border: 1px dashed var(--border-light);">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: #f0fdf4; color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 14px;">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading); margin-bottom: 6px;">
+          Ready for Diagnostic Leaf Scan
+        </h3>
+        <p style="font-size: 0.86rem; color: var(--text-muted); max-width: 420px; margin: 0 auto;">
+          Upload a crop leaf image on the left to receive a real-time pathological diagnosis, confidence score, and management recommendations.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- DISEASE SCANS HISTORY -->
+<div class="card" id="diseaseHistoryCard" style="margin-top: 28px;">
+  <div class="card-header">
+    <div class="card-title-box">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <div>
+        <h3 class="card-title">Past Disease Scan History</h3>
+        <p class="card-subtitle">Log of previously scanned crop specimens</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Disease / Condition</th>
+          <th>Confidence</th>
+          <th>Status</th>
+          <th>Date Scanned</th>
+        </tr>
+      </thead>
+      <tbody id="diseaseHistoryTbody">
+        {% if history %}
+          {% for h in history %}
+          <tr>
+            <td><strong style="color: var(--primary);">{{ h['disease'] }}</strong></td>
+            <td><strong>{{ h['confidence'] }}%</strong></td>
+            <td>
+              {% if h['is_healthy'] %}
+                <span class="badge badge-success">Healthy</span>
+              {% else %}
+                <span class="badge badge-danger">Infected</span>
+              {% endif %}
+            </td>
+            <td>{{ h['created_at'][:10] if h['created_at'] else 'Recent' }}</td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr id="emptyHistoryRow">
+            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 24px;">
+              <i class="fa-solid fa-clock-rotate-left" style="margin-right: 6px; opacity: 0.5;"></i> No previous disease scans recorded yet. Your analyzed scans will appear here automatically.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('diseaseUploadForm');
+    const dropzone = document.getElementById('uploadDropzone');
+    const fileInput = document.getElementById('leafImageInput');
+    const placeholder = document.getElementById('uploadPlaceholder');
+    const previewContainer = document.getElementById('uploadPreviewContainer');
+    const previewImg = document.getElementById('uploadPreviewImg');
+    const fileNameDisplay = document.getElementById('uploadFileName');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const errorAlert = document.getElementById('uploadErrorAlert');
+    const errorMsg = document.getElementById('uploadErrorMsg');
+    const resultContainer = document.getElementById('diseaseResultContainer');
+    const historyTbody = document.getElementById('diseaseHistoryTbody');
+
+    if (!dropzone || !fileInput) return;
+
+    function hideError() {
+      if (errorAlert) errorAlert.style.display = 'none';
+    }
+
+    function showError(msg) {
+      if (errorAlert && errorMsg) {
+        errorMsg.textContent = msg;
+        errorAlert.style.display = 'block';
+      }
+    }
+
+    // Trigger file dialog on click
+    dropzone.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // Handle file selection
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        handleFilePreview(file);
+      }
+    });
+
+    // Drag & Drop event listeners
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.style.borderColor = 'var(--primary)';
+        dropzone.style.backgroundColor = '#f0fdf4';
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.style.borderColor = '';
+        dropzone.style.backgroundColor = '';
+      }, false);
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const file = dt.files[0];
+      if (file) {
+        fileInput.files = dt.files;
+        handleFilePreview(file);
+      }
+    });
+
+    function handleFilePreview(file) {
+      hideError();
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+      const fileNameLower = file.name.toLowerCase();
+      const hasValidExt = validExtensions.some(ext => fileNameLower.endsWith(ext));
+
+      if (!validTypes.includes(file.type) && !hasValidExt) {
+        showError('Unsupported file format. Please upload a JPG, JPEG, PNG, or WEBP image.');
+        return;
+      }
+
+      if (file.size > 16 * 1024 * 1024) {
+        showError('Selected image is too large (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB). Maximum size allowed is 16 MB.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImg.src = e.target.result;
+        fileNameDisplay.textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+        placeholder.style.display = 'none';
+        previewContainer.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Helper to add a scan record to the history table in real-time
+    function addHistoryRow(diseaseName, confidence, isHealthy) {
+      if (!historyTbody) return;
+      const emptyRow = document.getElementById('emptyHistoryRow');
+      if (emptyRow) emptyRow.remove();
+
+      const newRow = document.createElement('tr');
+      newRow.style.backgroundColor = '#f0fdf4';
+      newRow.style.transition = 'background-color 1.5s ease';
+
+      const badgeClass = isHealthy ? 'badge-success' : 'badge-danger';
+      const badgeText = isHealthy ? 'Healthy' : 'Infected';
+
+      newRow.innerHTML = `
+        <td><strong style="color: var(--primary);">${diseaseName}</strong></td>
+        <td><strong>${confidence}%</strong></td>
+        <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+        <td><span style="color: var(--primary-dark); font-weight: 700;">Just now</span></td>
+      `;
+
+      historyTbody.insertBefore(newRow, historyTbody.firstChild);
+      setTimeout(() => {
+        newRow.style.backgroundColor = '';
+      }, 2000);
+    }
+
+    // Connect form submission to real backend API
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideError();
+
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) {
+          showError('Please select or drag & drop a crop leaf image first.');
+          return;
+        }
+
+        if (file.size > 16 * 1024 * 1024) {
+          showError('Image file is too large. Maximum file size is 16 MB.');
+          return;
+        }
+
+        // Set Loading State
+        analyzeBtn.disabled = true;
+        const originalBtnHtml = analyzeBtn.innerHTML;
+        analyzeBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Analyzing Leaf Image...</span>';
+
+        if (resultContainer) {
+          resultContainer.innerHTML = `
+            <div class="card" style="padding: 48px 24px; text-align: center; background: #ffffff;">
+              <div style="width: 64px; height: 64px; border-radius: 50%; background: #f0fdf4; color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 16px;">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+              </div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-heading); margin-bottom: 8px;">
+                Evaluating Crop Leaf with Neural Network
+              </h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted); max-width: 440px; margin: 0 auto;">
+                Processing high-resolution visual patterns through the MobileNetV2 pathology model...
+              </p>
+            </div>
+          `;
+        }
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+          const response = await fetch('/api/disease/predict', {
+            method: 'POST',
+            body: formData
+          });
+
+          let data;
+          try {
+            data = await response.json();
+          } catch (jsonErr) {
+            data = {
+              status: 'error',
+              message: 'Server returned unexpected response (Status ' + response.status + ').'
+            };
+          }
+
+          if (!response.ok || data.status === 'error') {
+            const err = data.message || 'Disease detection failed. Please try again with a clear photo.';
+            showError(err);
+            if (resultContainer) {
+              resultContainer.innerHTML = `
+                <div class="card" style="padding: 36px 24px; text-align: center; border: 1.5px solid #fecaca; background: #fff5f5;">
+                  <div style="width: 56px; height: 56px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 12px;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                  </div>
+                  <h3 style="font-size: 1.15rem; font-weight: 800; color: #991b1b; margin-bottom: 6px;">
+                    Diagnosis Failed
+                  </h3>
+                  <p style="font-size: 0.88rem; color: #7f1d1d; max-width: 420px; margin: 0 auto;">
+                    ${err}
+                  </p>
+                </div>
+              `;
+            }
+            return;
+          }
+
+          // Handle Low Confidence
+          if (data.status === 'low_confidence') {
+            const previewUrl = data.image_url || previewImg.src;
+            const actions = Array.isArray(data.recommended_action) ? data.recommended_action : [data.recommended_action];
+            const actionsList = actions.map(item => `<li>${item}</li>`).join('');
+
+            resultContainer.innerHTML = `
+              <div class="card" style="border: 2px solid #f59e0b; background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                  <div>
+                    <span class="badge" style="background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; font-size: 0.78rem; margin-bottom: 8px;">
+                      <i class="fa-solid fa-circle-question"></i> Low Confidence Diagnosis
+                    </span>
+                    <h3 style="font-size: 1.35rem; font-weight: 800; color: #92400e; margin-top: 4px;">
+                      ${data.disease}
+                    </h3>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #d97706;">
+                      ${data.confidence}%
+                    </div>
+                    <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">Confidence Score</span>
+                  </div>
+                </div>
+
+                ${previewUrl ? `
+                <div style="margin-bottom: 20px; text-align: center; background: #f8faf8; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                  <img src="${previewUrl}" alt="Analyzed Leaf" style="max-height: 180px; margin: 0 auto; border-radius: var(--radius-sm); object-fit: contain;">
+                </div>` : ''}
+
+                <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: 16px;">
+                  <h4 style="font-size: 0.95rem; font-weight: 700; color: #92400e; margin-bottom: 8px;">
+                    <i class="fa-solid fa-camera-rotate" style="margin-right: 6px;"></i> Suggestions for Retake:
+                  </h4>
+                  <ul style="padding-left: 20px; font-size: 0.86rem; color: #78350f; display: flex; flex-direction: column; gap: 6px;">
+                    ${actionsList}
+                  </ul>
+                </div>
+              </div>
+            `;
+            return;
+          }
+
+          // Handle Successful Real Diagnosis
+          if (data.status === 'success') {
+            const isHealthy = Boolean(data.is_healthy);
+            const previewUrl = data.image_url || previewImg.src;
+            const symptoms = Array.isArray(data.symptoms) ? data.symptoms : [data.symptoms];
+            const actions = Array.isArray(data.recommended_action) ? data.recommended_action : [data.recommended_action];
+            const symptomsList = symptoms.map(s => `<li>${s}</li>`).join('');
+            const actionsList = actions.map(t => `<li>${t}</li>`).join('');
+
+            const borderCol = isHealthy ? '#22c55e' : '#ef4444';
+            const badgeClass = isHealthy ? 'badge-success' : 'badge-danger';
+            const badgeIcon = isHealthy ? 'fa-circle-check' : 'fa-triangle-exclamation';
+            const badgeText = isHealthy ? 'Healthy Specimen' : 'Pathogen Detected';
+            const confColor = isHealthy ? '#16a34a' : '#dc2626';
+            const gradBg = isHealthy ? 'linear-gradient(90deg, #52b788, #16a34a)' : 'linear-gradient(90deg, #f87171, #dc2626)';
+            const actionBg = isHealthy ? '#edf9ee' : '#fef2f2';
+            const actionBorder = isHealthy ? '#bbf7d0' : '#fecaca';
+            const actionText = isHealthy ? '#14532d' : '#7f1d1d';
+            const actionHeading = isHealthy ? '#14532d' : '#991b1b';
+            const actionIcon = isHealthy ? '#16a34a' : '#dc2626';
+
+            resultContainer.innerHTML = `
+              <div class="card" style="border: 2px solid ${borderCol}; background: linear-gradient(180deg, #ffffff 0%, #fafdfb 100%);">
+                <!-- Result Header -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                  <div>
+                    <span class="badge ${badgeClass}" style="font-size: 0.78rem; margin-bottom: 8px;">
+                      <i class="fa-solid ${badgeIcon}"></i>
+                      ${badgeText} • ${data.crop}
+                    </span>
+                    <h3 style="font-size: 1.55rem; font-weight: 800; color: var(--text-heading); margin-top: 4px;">
+                      ${data.disease}
+                    </h3>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 2rem; font-weight: 800; color: ${confColor};">
+                      ${data.confidence}%
+                    </div>
+                    <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">Diagnosis Confidence</span>
+                  </div>
+                </div>
+
+                <!-- Confidence Progress Bar -->
+                <div class="progress-bar-container" style="height: 10px; margin-bottom: 20px;">
+                  <div class="progress-bar-fill" style="width: ${data.confidence}%; background: ${gradBg};"></div>
+                </div>
+
+                <!-- Scanned Leaf Graphic / Image Preview -->
+                ${previewUrl ? `
+                <div style="margin-bottom: 20px; text-align: center; background: #f8faf8; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                  <img src="${previewUrl}" alt="Analyzed Leaf" style="max-height: 180px; margin: 0 auto; border-radius: var(--radius-sm); object-fit: contain;">
+                </div>` : ''}
+
+                <!-- Symptoms Checklist -->
+                <div style="margin-bottom: 20px;">
+                  <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-heading); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-stethoscope" style="color: var(--secondary);"></i>
+                    <span>Symptoms</span>
+                  </h4>
+                  <ul style="padding-left: 20px; font-size: 0.88rem; color: var(--text-main); display: flex; flex-direction: column; gap: 6px;">
+                    ${symptomsList}
+                  </ul>
+                </div>
+
+                <!-- Recommended Action & Treatment Protocol -->
+                <div style="background: ${actionBg}; border: 1px solid ${actionBorder}; border-radius: var(--radius-md); padding: 18px;">
+                  <h4 style="font-size: 1rem; font-weight: 700; color: ${actionHeading}; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-shield-virus" style="color: ${actionIcon};"></i>
+                    <span>Recommended Action:</span>
+                  </h4>
+                  <ul style="padding-left: 20px; font-size: 0.88rem; color: ${actionText}; display: flex; flex-direction: column; gap: 8px;">
+                    ${actionsList}
+                  </ul>
+
+                  ${data.prevention ? `
+                  <div style="margin-top: 14px; font-size: 0.82rem; color: ${isHealthy ? '#166534' : '#991b1b'}; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 8px;">
+                    <strong>🛡️ Prevention:</strong> ${data.prevention}
+                  </div>` : ''}
+                </div>
+              </div>
+            `;
+
+            // Update history table in real-time
+            addHistoryRow(data.disease, data.confidence, isHealthy);
+          }
+
+        } catch (netErr) {
+          showError('Unable to reach the crop disease detection server. Please ensure the backend is running.');
+          if (resultContainer) {
+            resultContainer.innerHTML = `
+              <div class="card" style="padding: 36px 24px; text-align: center; border: 1.5px solid #fecaca; background: #fff5f5;">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 12px;">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: #991b1b; margin-bottom: 6px;">
+                  Server Connection Error
+                </h3>
+                <p style="font-size: 0.88rem; color: #7f1d1d; max-width: 420px; margin: 0 auto;">
+                  Could not communicate with the prediction service. Please check your network and try again.
+                </p>
+              </div>
+            `;
+          }
+        } finally {
+          analyzeBtn.disabled = false;
+          analyzeBtn.innerHTML = originalBtnHtml;
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

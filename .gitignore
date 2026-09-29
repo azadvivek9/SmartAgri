@@ -1,0 +1,54 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+.Python
+
+# SQLite Databases (Local database with user data)
+*.db
+*.sqlite
+*.sqlite3
+agrismart.db
+instance/
+
+# User Uploaded Content (Preserve directory structure via .gitkeep)
+uploads/disease/*
+!uploads/disease/.gitkeep
+uploads/*
+!uploads/.gitkeep
+!uploads/disease/
+
+# Log Files
+*.log
+logs/
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
